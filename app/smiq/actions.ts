@@ -57,7 +57,7 @@ export async function submitResponse(
       lang,
     });
 
-    await sendConfirmationEmail({ name, email, token });
+    await sendConfirmationEmail({ name, email, token, lang });
 
     return { ok: true, pendingEmail: email };
   } catch (error) {
