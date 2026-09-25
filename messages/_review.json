@@ -61,7 +61,11 @@
       "form_step2.grad_ungraded_sub",
       "form_success.heading",
       "form_success.body_default",
-      "form_success.body_lapsed"
+      "form_success.body_lapsed",
+      "email.confirm.subject",
+      "email.confirm.body",
+      "email.confirm.cta",
+      "email.confirm.footer"
     ]
   },
   "es": {
@@ -126,7 +130,11 @@
       "form_step2.grad_ungraded_sub",
       "form_success.heading",
       "form_success.body_default",
-      "form_success.body_lapsed"
+      "form_success.body_lapsed",
+      "email.confirm.subject",
+      "email.confirm.body",
+      "email.confirm.cta",
+      "email.confirm.footer"
     ]
   },
   "fr": {
@@ -191,7 +199,11 @@
       "form_step2.grad_ungraded_sub",
       "form_success.heading",
       "form_success.body_default",
-      "form_success.body_lapsed"
+      "form_success.body_lapsed",
+      "email.confirm.subject",
+      "email.confirm.body",
+      "email.confirm.cta",
+      "email.confirm.footer"
     ]
   }
 }

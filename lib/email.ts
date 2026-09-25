@@ -1,7 +1,15 @@
 import { Resend } from "resend";
+import { getTranslations } from "next-intl/server";
 import { SEGMENTS, TEACHING_ROLES, GRADUATION_LEVELS, LANGUAGES } from "./reference-data";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+const SUPPORTED_LOCALES = new Set<string>(LANGUAGES.map((l) => l.code));
+const DEFAULT_LOCALE = "en";
+
+function resolveEmailLocale(lang: string | null): string {
+  return lang && SUPPORTED_LOCALES.has(lang) ? lang : DEFAULT_LOCALE;
+}
 
 function baseUrl() {
   return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
@@ -28,19 +36,23 @@ export async function sendConfirmationEmail({
   name,
   email,
   token,
+  lang,
 }: {
   name: string;
   email: string;
   token: string;
+  lang: string | null;
 }) {
   const firstName = name.split(" ")[0];
   const confirmUrl = `${baseUrl()}/smiq/confirm?token=${token}`;
   const from = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
+  const locale = resolveEmailLocale(lang);
+  const t = await getTranslations({ locale, namespace: "email.confirm" });
 
   const { data, error } = await resend.emails.send({
     from,
     to: email,
-    subject: "Confirm your Capoeira International response",
+    subject: t("subject"),
     html: `
 <!-- confirm email -->
 <!DOCTYPE html>
@@ -54,19 +66,19 @@ export async function sendConfirmationEmail({
           Capoeira International
         </td></tr>
         <tr><td style="color:#e8dfd0;font-size:17px;padding-bottom:12px;">
-          Axé, ${firstName} —
+          ${escapeHtml(t("greeting", { firstName }))}
         </td></tr>
         <tr><td style="color:#b8aa94;font-size:15px;line-height:1.6;padding-bottom:28px;">
-          Thank you for sharing your experience with the Capoeira community. Please confirm your email address to submit your response.
+          ${escapeHtml(t("body"))}
         </td></tr>
         <tr><td style="padding-bottom:28px;">
           <a href="${confirmUrl}"
              style="display:inline-block;background:#c8922a;color:#0e0c09;font-size:15px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:6px;">
-            Confirm my response →
+            ${escapeHtml(t("cta"))}
           </a>
         </td></tr>
         <tr><td style="color:#6b5f4e;font-size:13px;line-height:1.5;">
-          This link expires in 24 hours. If you didn't fill in the Capoeira International survey, you can safely ignore this email.
+          ${escapeHtml(t("footer"))}
         </td></tr>
       </table>
     </td></tr>

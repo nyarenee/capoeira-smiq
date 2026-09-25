@@ -21,8 +21,13 @@ async function resolveLocale(): Promise<string> {
   return DEFAULT_LOCALE;
 }
 
-export default getRequestConfig(async () => {
-  const locale = await resolveLocale();
+export default getRequestConfig(async ({ requestLocale }) => {
+  // An explicit override (e.g. getTranslations({ locale, ... }) for
+  // locale-specific emails outside the request) takes precedence over
+  // cookie/header detection.
+  const requested = await requestLocale;
+  const locale =
+    requested && SUPPORTED_LOCALES.has(requested) ? requested : await resolveLocale();
 
   return {
     locale,

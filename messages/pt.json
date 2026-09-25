@@ -162,5 +162,14 @@
     "required_fields": "Por favor, preencha todos os campos obrigatórios.",
     "invalid_email": "Por favor, insira um endereço de e-mail válido.",
     "server_error": "Algo deu errado. Por favor, tente novamente."
+  },
+  "email": {
+    "confirm": {
+      "subject": "Confirme sua resposta para a Capoeira International",
+      "greeting": "Axé, {firstName} —",
+      "body": "Obrigado por compartilhar sua experiência com a comunidade de Capoeira. Confirme seu endereço de e-mail para enviar sua resposta.",
+      "cta": "Confirmar minha resposta →",
+      "footer": "Este link expira em 24 horas. Se você não preencheu a pesquisa da Capoeira International, pode ignorar este e-mail com segurança."
+    }
   }
 }

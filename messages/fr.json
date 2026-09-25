@@ -162,5 +162,14 @@
     "required_fields": "Veuillez remplir tous les champs obligatoires.",
     "invalid_email": "Veuillez saisir une adresse e-mail valide.",
     "server_error": "Quelque chose s'est mal passé. Veuillez réessayer."
+  },
+  "email": {
+    "confirm": {
+      "subject": "Confirmez votre réponse pour Capoeira International",
+      "greeting": "Axé, {firstName} —",
+      "body": "Merci d'avoir partagé votre expérience avec la communauté de Capoeira. Veuillez confirmer votre adresse e-mail pour envoyer votre réponse.",
+      "cta": "Confirmer ma réponse →",
+      "footer": "Ce lien expire dans 24 heures. Si vous n'avez pas rempli le sondage Capoeira International, vous pouvez ignorer cet e-mail en toute sécurité."
+    }
   }
 }
