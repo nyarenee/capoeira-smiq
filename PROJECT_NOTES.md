@@ -81,6 +81,37 @@
   `lib/validate-smiq-payload.ts` with a 35-case test suite (segments,
   teacher-branch requirements, malformed email, normalization) — see PR #1.
 
+## Database migrations (decided 2026-10-01)
+
+- **Moved off `drizzle-kit push` onto tracked, reversible migrations.**
+  `db:push` diffed `db/schema.ts` straight onto Neon with no history and
+  no way back. Now: `db:generate` (drizzle-kit) writes a numbered `.sql`
+  migration under `drizzle/`, `db:generate-down` (drizzle-down) writes
+  the matching `.down.sql` next to it, and `db:migrate` applies pending
+  ones. `db:status`/`db:rollback`/`db:repair` (all drizzle-down) cover
+  checking what's applied, undoing a migration, and fixing the tracking
+  table. `drizzle.config.ts` needed no changes — drizzle-down reads its
+  `out` path directly.
+- **Neon was baselined, not re-migrated.** The tables already existed
+  from prior `db:push` runs, so applying `0000_...sql` as a normal
+  migration would have failed on `CREATE TABLE`. Instead: created the
+  `drizzle.__drizzle_migrations` tracking table/schema by hand (the
+  exact DDL `drizzle-orm`'s migrator uses — `CREATE SCHEMA IF NOT
+  EXISTS drizzle` + `CREATE TABLE IF NOT EXISTS
+  drizzle.__drizzle_migrations (id SERIAL PRIMARY KEY, hash text NOT
+  NULL, created_at bigint)` — since drizzle-kit normally creates this
+  itself on first `migrate` and drizzle-down's `repair` only inserts
+  rows into it), then ran `drizzle-down repair --baseline` to mark
+  migration `0000` applied without re-running its SQL. Verified after
+  with `db:migrate` running clean as a no-op.
+- `db:push` is gone — no other references to it existed in the repo.
+- **Known issue, not yet fixed:** every `pg`/drizzle-kit DB call prints
+  a `pg-connection-string` SSL warning — `sslmode=require` in
+  `DATABASE_URL` is being treated as an alias for `verify-full` and
+  that will stop being true in a future major version of `pg`. Fix
+  later with `uselibpqcompat=true&sslmode=require` or explicit
+  `sslmode=verify-full` in the Neon connection string.
+
 ## What to carry forward from v1
 
 The existing build is well-thought-through. v2 should preserve:
