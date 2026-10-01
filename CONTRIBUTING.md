@@ -70,18 +70,23 @@ git branch -d feat/my-change
 git push origin --delete feat/my-change
 ```
 
+## Enforcement
+
+A GitHub ruleset named **"Protect main"** targets `refs/heads/main` and
+enforces part of the policy above at the repo level, not just by agreement:
+
+- Pull request required before merging — no direct pushes, even trivial
+  one-line fixes. There is no bypass, including for the repo owner.
+- 0 required approvals, so a solo developer can still merge their own PRs.
+- No force pushes (`non_fast_forward`) and no branch deletion.
+
 ## Known gaps / follow-ups
 
-This document covers the branching and PR *policy*. Two things would make
-it enforced rather than just agreed-upon, and are worth doing as follow-up
-work rather than bundled into this doc:
-
-- **No GitHub branch protection is configured on `main` yet** — right now
-  nothing stops a direct push to `main` at the GitHub level (Claude Code's
-  own auto-mode permission guard blocks it, but that's local tooling, not a
-  repo setting). Enabling "Require a pull request before merging" on `main`
-  would make the no-direct-push rule actually enforced.
 - **No CI workflow exists** (`.github/workflows/`) — the typecheck/lint/test
   commands above are run locally, on the honor system. Adding a GitHub
-  Actions workflow that runs them on every PR would turn "merge conditions"
-  from a checklist into an actual gate.
+  Actions workflow that runs them on every PR, and adding "require status
+  checks to pass" to the ruleset above, would turn "merge conditions" from a
+  checklist into an actual gate.
+- **Staging environment** — not set up yet (see `PROJECT_NOTES.md`). Once it
+  exists, this doc and the ruleset should be revisited (e.g. a required
+  staging deploy/check before merging to `main`).
