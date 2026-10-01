@@ -58,6 +58,7 @@ the rewrite. Don't recreate it.
 - Server actions or route handlers for every write
 - Secrets in env vars — never committed, never logged
 - Small, focused commits
+- Branching, PR, and merge rules: see `CONTRIBUTING.md`
 
 ## Next.js notes
 
