@@ -1,48 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function ConfirmedContent() {
   const params = useSearchParams();
   const expired = params.get("expired") === "1";
-  // This route is statically prerendered, and useSearchParams forces this
-  // subtree to render client-side rather than hydrate from the static shell.
-  // window.i18n exists synchronously (see public/i18n.js) but its translations
-  // load asynchronously, so the first client render can't safely call
-  // window.i18n.t() yet — it must match the fallback-only render below until
-  // mounted, or React throws a hydration mismatch.
-  const [mounted, setMounted] = useState(false);
-  const [, setTick] = useState(0);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- required to avoid the hydration mismatch described above
-    setMounted(true);
-    function onLangChange() {
-      setTick((n) => n + 1);
-    }
-    document.addEventListener("i18n:change", onLangChange);
-    return () => document.removeEventListener("i18n:change", onLangChange);
-  }, []);
-
-  function t(key: string, fallback: string): string {
-    if (!mounted) return fallback;
-    return window.i18n?.t(key) || fallback;
-  }
+  const t = useTranslations();
 
   if (expired) {
     return (
       <div className="card" id="main-card">
         <div id="success-screen">
           <div className="axe-heading" id="success-heading">
-            {t("confirmed.expired_heading", "Link expired")}
+            {t("confirmed.expired_heading")}
           </div>
           <p className="success-msg" id="success-msg">
-            {t("confirmed.expired_before", "This confirmation link has expired or has already been used. Please ")}
+            {t("confirmed.expired_before")}
             <a href="/smiq" style={{ color: "var(--gold)" }}>
-              {t("confirmed.expired_link", "fill in the form again")}
+              {t("confirmed.expired_link")}
             </a>
-            {t("confirmed.expired_after", " to receive a new one.")}
+            {t("confirmed.expired_after")}
           </p>
         </div>
       </div>
@@ -53,10 +31,10 @@ export default function ConfirmedContent() {
     <div className="card" id="main-card">
       <div id="success-screen">
         <div className="axe-heading" id="success-heading">
-          {t("confirmed.success_heading", "Axé!")}
+          {t("confirmed.success_heading")}
         </div>
         <p className="success-msg" id="success-msg">
-          {t("confirmed.success_body", "Thank you for sharing. We read every response personally and your answer will help shape something genuinely useful for the Capoeira community.")}
+          {t("confirmed.success_body")}
         </p>
       </div>
     </div>
