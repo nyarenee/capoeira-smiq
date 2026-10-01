@@ -1,0 +1,381 @@
+{
+  "id": "bc57d3cd-6f20-4ddf-af1a-3add91faec14",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.graduation_levels": {
+      "name": "graduation_levels",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.languages": {
+      "name": "languages",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pending_smiq_submissions": {
+      "name": "pending_smiq_submissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "segment": {
+          "name": "segment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "smiq_answer": {
+          "name": "smiq_answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teaching_role": {
+          "name": "teaching_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "graduation_level": {
+          "name": "graduation_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lang": {
+          "name": "lang",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pending_smiq_submissions_segment_segments_code_fk": {
+          "name": "pending_smiq_submissions_segment_segments_code_fk",
+          "tableFrom": "pending_smiq_submissions",
+          "tableTo": "segments",
+          "columnsFrom": [
+            "segment"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pending_smiq_submissions_teaching_role_teaching_roles_code_fk": {
+          "name": "pending_smiq_submissions_teaching_role_teaching_roles_code_fk",
+          "tableFrom": "pending_smiq_submissions",
+          "tableTo": "teaching_roles",
+          "columnsFrom": [
+            "teaching_role"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pending_smiq_submissions_graduation_level_graduation_levels_code_fk": {
+          "name": "pending_smiq_submissions_graduation_level_graduation_levels_code_fk",
+          "tableFrom": "pending_smiq_submissions",
+          "tableTo": "graduation_levels",
+          "columnsFrom": [
+            "graduation_level"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pending_smiq_submissions_lang_languages_code_fk": {
+          "name": "pending_smiq_submissions_lang_languages_code_fk",
+          "tableFrom": "pending_smiq_submissions",
+          "tableTo": "languages",
+          "columnsFrom": [
+            "lang"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pending_smiq_submissions_token_unique": {
+          "name": "pending_smiq_submissions_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.segments": {
+      "name": "segments",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.smiq_responses": {
+      "name": "smiq_responses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "segment": {
+          "name": "segment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "smiq_answer": {
+          "name": "smiq_answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "teaching_role": {
+          "name": "teaching_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "graduation_level": {
+          "name": "graduation_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lang": {
+          "name": "lang",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "smiq_responses_segment_segments_code_fk": {
+          "name": "smiq_responses_segment_segments_code_fk",
+          "tableFrom": "smiq_responses",
+          "tableTo": "segments",
+          "columnsFrom": [
+            "segment"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "smiq_responses_teaching_role_teaching_roles_code_fk": {
+          "name": "smiq_responses_teaching_role_teaching_roles_code_fk",
+          "tableFrom": "smiq_responses",
+          "tableTo": "teaching_roles",
+          "columnsFrom": [
+            "teaching_role"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "smiq_responses_graduation_level_graduation_levels_code_fk": {
+          "name": "smiq_responses_graduation_level_graduation_levels_code_fk",
+          "tableFrom": "smiq_responses",
+          "tableTo": "graduation_levels",
+          "columnsFrom": [
+            "graduation_level"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "smiq_responses_lang_languages_code_fk": {
+          "name": "smiq_responses_lang_languages_code_fk",
+          "tableFrom": "smiq_responses",
+          "tableTo": "languages",
+          "columnsFrom": [
+            "lang"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teaching_roles": {
+      "name": "teaching_roles",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
