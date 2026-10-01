@@ -9,7 +9,7 @@ Branded "Capoeira International," run by Malta Capoeira.
   --name smiq` before assuming a merged commit is live, and run `npm run
   deploy` (+ `npx wrangler secret bulk .env.local` if env vars changed) to
   ship it
-- **Repo:** github.com/nyainmotion/capoeira-smiq
+- **Repo:** github.com/nyarenee/capoeira-smiq
 - **Owner:** MALTAS
 
 ## Stack (v2 rebuild in progress)
