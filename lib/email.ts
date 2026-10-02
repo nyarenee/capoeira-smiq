@@ -58,26 +58,26 @@ export async function sendConfirmationEmail({
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" /></head>
-<body style="margin:0;padding:0;background:#0e0c09;font-family:'Georgia',serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0e0c09;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:Calibri,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:40px 20px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#15120d;border:1px solid #2a2318;border-radius:8px;padding:40px;">
-        <tr><td style="color:#c8922a;font-size:22px;font-weight:bold;padding-bottom:16px;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#f5f6f8;border:1px solid #d9dadc;border-radius:8px;padding:40px;">
+        <tr><td style="color:#213a8f;font-size:22px;font-weight:bold;padding-bottom:16px;">
           Capoeira International
         </td></tr>
-        <tr><td style="color:#e8dfd0;font-size:17px;padding-bottom:12px;">
+        <tr><td style="color:#000000;font-size:17px;padding-bottom:12px;">
           ${escapeHtml(t("greeting", { firstName }))}
         </td></tr>
-        <tr><td style="color:#b8aa94;font-size:15px;line-height:1.6;padding-bottom:28px;">
+        <tr><td style="color:#706f6f;font-size:15px;line-height:1.6;padding-bottom:28px;">
           ${escapeHtml(t("body"))}
         </td></tr>
         <tr><td style="padding-bottom:28px;">
           <a href="${confirmUrl}"
-             style="display:inline-block;background:#c8922a;color:#0e0c09;font-size:15px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:6px;">
+             style="display:inline-block;background:#213a8f;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:6px;">
             ${escapeHtml(t("cta"))}
           </a>
         </td></tr>
-        <tr><td style="color:#6b5f4e;font-size:13px;line-height:1.5;">
+        <tr><td style="color:#9a9a9a;font-size:13px;line-height:1.5;">
           ${escapeHtml(t("footer"))}
         </td></tr>
       </table>
@@ -146,11 +146,11 @@ export async function sendOwnerNotification({
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" /></head>
-<body style="margin:0;padding:0;background:#0e0c09;font-family:'Georgia',serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0e0c09;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:Calibri,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:40px 20px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#15120d;border:1px solid #2a2318;border-radius:8px;padding:40px;">
-        <tr><td style="color:#c8922a;font-size:22px;font-weight:bold;padding-bottom:16px;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#f5f6f8;border:1px solid #d9dadc;border-radius:8px;padding:40px;">
+        <tr><td style="color:#213a8f;font-size:22px;font-weight:bold;padding-bottom:16px;">
           New SMIQ response
         </td></tr>
         <tr><td style="padding-bottom:24px;">
@@ -159,15 +159,15 @@ export async function sendOwnerNotification({
               .map(
                 ([label, value]) => `
             <tr>
-              <td style="color:#6b5f4e;font-size:13px;padding:4px 12px 4px 0;white-space:nowrap;vertical-align:top;">${label}</td>
-              <td style="color:#e8dfd0;font-size:14px;padding:4px 0;">${value}</td>
+              <td style="color:#9a9a9a;font-size:13px;padding:4px 12px 4px 0;white-space:nowrap;vertical-align:top;">${label}</td>
+              <td style="color:#000000;font-size:14px;padding:4px 0;">${value}</td>
             </tr>`
               )
               .join("")}
           </table>
         </td></tr>
-        <tr><td style="color:#6b5f4e;font-size:13px;padding-bottom:8px;">SMIQ answer</td></tr>
-        <tr><td style="color:#b8aa94;font-size:15px;line-height:1.6;">
+        <tr><td style="color:#9a9a9a;font-size:13px;padding-bottom:8px;">SMIQ answer</td></tr>
+        <tr><td style="color:#706f6f;font-size:15px;line-height:1.6;">
           ${escapeHtml(smiqAnswer)}
         </td></tr>
       </table>
