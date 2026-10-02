@@ -51,9 +51,13 @@ export async function waitForPendingSubmission(email: string, timeoutMs = 10000)
 
 /**
  * Inserts a pending row directly (bypassing submitResponse/Turnstile) so
- * expired/invalid-token confirm behavior can be tested without a browser.
+ * confirm-flow behavior can be tested without a browser or a real submit.
  */
-export async function seedExpiredPendingSubmission(overrides: { email: string; segment?: string }) {
+export async function seedPendingSubmission(overrides: {
+  email: string;
+  segment?: string;
+  expiresAt?: Date;
+}) {
   const token = crypto.randomUUID();
   await db()
     .insert(pendingSmiqSubmissions)
@@ -62,10 +66,15 @@ export async function seedExpiredPendingSubmission(overrides: { email: string; s
       name: "E2E Test",
       email: overrides.email,
       segment: overrides.segment ?? "curious",
-      smiqAnswer: "Seeded directly for an expired-token test case.",
-      expiresAt: new Date(Date.now() - 60 * 60 * 1000), // 1h in the past
+      smiqAnswer: "Seeded directly for a confirm-flow test case.",
+      expiresAt: overrides.expiresAt ?? new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
   return token;
+}
+
+/** Convenience wrapper for the expired-token test case. */
+export async function seedExpiredPendingSubmission(overrides: { email: string; segment?: string }) {
+  return seedPendingSubmission({ ...overrides, expiresAt: new Date(Date.now() - 60 * 60 * 1000) });
 }
 
 /** Deletes any rows this test run created, by exact email. Call in test teardown. */
