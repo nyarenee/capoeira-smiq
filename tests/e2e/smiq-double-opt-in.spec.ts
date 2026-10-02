@@ -24,7 +24,7 @@ test.describe("double opt-in confirm roundtrip (shared sandbox inbox, serial)", 
   }) => {
     const marker = testMarker("double-opt-in");
 
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await selectSegment(page, "curious");
     await fillSmiqAnswer(page, `Double opt-in roundtrip test answer. ${marker}`);
     await fillContactAndSubmit(page, {
@@ -45,8 +45,8 @@ test.describe("double opt-in confirm roundtrip (shared sandbox inbox, serial)", 
     expect(hoursUntilExpiry).toBeLessThan(25);
 
     // Simulate clicking the confirmation email's link.
-    await page.goto(`/smiq/confirm?token=${pending.token}`);
-    expect(page.url()).toContain("/smiq/confirmed");
+    await page.goto(`/intelligence/confirm?token=${pending.token}`);
+    expect(page.url()).toContain("/intelligence/confirmed");
     expect(page.url()).not.toContain("expired=1");
 
     const responseRow = await findSmiqResponseByEmail(RESEND_SANDBOX_OWNER_EMAIL, {
@@ -58,7 +58,7 @@ test.describe("double opt-in confirm roundtrip (shared sandbox inbox, serial)", 
     // Single-use enforcement: the pending row was consumed by the first
     // confirm (atomic DELETE...RETURNING in confirmResponse), so the same
     // link should no longer work.
-    await page.goto(`/smiq/confirm?token=${pending.token}`);
+    await page.goto(`/intelligence/confirm?token=${pending.token}`);
     expect(page.url()).toContain("expired=1");
 
     await deleteTestRowByMarker(RESEND_SANDBOX_OWNER_EMAIL, marker);

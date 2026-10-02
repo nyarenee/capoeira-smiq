@@ -36,8 +36,8 @@ async function main() {
   );
 
   results.push(
-    await check("GET /smiq -> 200 with default (en) copy", async () => {
-      const res = await fetch(`${baseUrl}/smiq`);
+    await check("GET /intelligence -> 200 with default (en) copy", async () => {
+      const res = await fetch(`${baseUrl}/intelligence`);
       assert(res.status === 200, `expected 200, got ${res.status}`);
       const body = await res.text();
       assert(
@@ -48,8 +48,10 @@ async function main() {
   );
 
   results.push(
-    await check("GET /smiq with pt locale cookie -> 200 with pt copy", async () => {
-      const res = await fetch(`${baseUrl}/smiq`, { headers: { Cookie: "capoeira-lang=pt" } });
+    await check("GET /intelligence with pt locale cookie -> 200 with pt copy", async () => {
+      const res = await fetch(`${baseUrl}/intelligence`, {
+        headers: { Cookie: "capoeira-lang=pt" },
+      });
       assert(res.status === 200, `expected 200, got ${res.status}`);
       const body = await res.text();
       assert(

@@ -44,7 +44,7 @@ export async function sendConfirmationEmail({
   lang: string | null;
 }) {
   const firstName = name.split(" ")[0];
-  const confirmUrl = `${baseUrl()}/smiq/confirm?token=${token}`;
+  const confirmUrl = `${baseUrl()}/intelligence/confirm?token=${token}`;
   const from = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
   const locale = resolveEmailLocale(lang);
   const t = await getTranslations({ locale, namespace: "email.confirm" });

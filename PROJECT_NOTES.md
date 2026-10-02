@@ -296,6 +296,28 @@
   document `proxy.ts`. If host-based routing is ever needed again, that's
   the file/export name to use in this Next version.
 
+## Renamed /smiq to /intelligence (decided 2026-10-02)
+
+- **Full rename, not just a redirect target.** `app/smiq/` → `app/intelligence/`
+  is now the real route — landing page CTAs, the confirmed-page "try again"
+  link, and the email confirmation link (`lib/email.ts`) all point at
+  `/intelligence` directly. Supersedes the `/intelligence` → `/smiq`
+  redirect from the "Custom domains" entry above, which only lasted one
+  deploy before this correction.
+- **Old `/smiq` URLs still work**, redirected to their `/intelligence`
+  equivalents via `next.config.ts` (`/smiq`, `/smiq/confirm`,
+  `/smiq/confirmed`) — protects any already-sent confirmation email or
+  bookmark. Next preserves query strings on redirect automatically, so
+  `?token=...`/`?expired=1` survive with no extra config.
+- **Public-facing URL only** — deliberately did not rename: the Cloudflare
+  Worker (`smiq`/`smiq-staging`), the Neon project, the
+  `smiq_responses`/`pending_smiq_submissions` tables, `/api/smiq/responses`
+  (unrelated dashboard-groundwork endpoint), or any internal naming (i18n
+  keys, CSS classes, component/file names like `SmiqForm.tsx`, DOM ids).
+  None of that is visible to a visitor as a URL or on-page text, so
+  renaming it would just be churn and risk (especially the DB/infra names)
+  for no user-facing benefit.
+
 ## What to carry forward from v1
 
 The existing build is well-thought-through. v2 should preserve:

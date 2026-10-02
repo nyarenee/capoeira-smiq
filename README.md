@@ -133,7 +133,7 @@ that doesn't exist yet.
 | Route | Description |
 |---|---|
 | `/` | Landing page |
-| `/smiq` | SMIQ survey form |
+| `/intelligence` | SMIQ survey form (`/smiq` still works, redirects here) |
 | `GET /api/smiq/responses` | Lists SMIQ responses. Requires `Authorization: Bearer <API_AUTH_TOKEN>`, 401s otherwise |
 
 ---
@@ -145,8 +145,8 @@ app/
   globals.css        # Design tokens + all component CSS
   layout.tsx         # Root layout (fonts, grain/glow overlays)
   page.tsx           # Landing page
-  smiq/
-    page.tsx         # /smiq server component shell
+  intelligence/
+    page.tsx         # /intelligence server component shell
     SmiqForm.tsx     # Multi-step form (client component)
     actions.ts       # Server action — validates + inserts response
 db/
