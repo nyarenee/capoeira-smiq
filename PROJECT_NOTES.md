@@ -131,8 +131,10 @@ The existing build is well-thought-through. v2 should preserve:
 - **Teacher-only branching:** teaching situation (4 options) + graduation level
   (6 options including "ungraded")
 - **Lapsed segment treated as non-teacher** for routing
-- **Design system:** warm dark palette (`#0e0c09` bg, `#c8922a` gold),
-  Playfair Display + Crimson Pro typography, SVG grain overlay, gold radial glow
+- **Design system (v2):** rebranded to the MALTAS institutional palette
+  (blue/yellow/green/red/gray on white) and Raleway/Carlito typography —
+  see CLAUDE.md rule #5. The v1 dark/gold/Playfair system was replaced,
+  not carried forward.
 - **Tone:** community-first, no fake resource promises, no sales language
 - **Success screen:** "Axé, [name]!" with segment-specific copy (lapsed gets
   a different, more reflective message)
