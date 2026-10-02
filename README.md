@@ -76,6 +76,46 @@ Live at https://smiq.capoeirainternational.workers.dev.
 
 ---
 
+## Staging
+
+A separate Worker (`smiq-staging`) backed by a Neon branch (`staging`,
+branched off `production`) for verifying changes against a real deployed
+target before merging to `main`. See `CONTRIBUTING.md` for when to use it.
+
+Create `.env.staging` (gitignored, same shape as `.env.local`) with:
+
+- The staging branch's connection string: `npx neon connection-string staging --pooled`
+- The same `RESEND_API_KEY`/`KIT_API_KEY`/Kit tag IDs as production (no
+  sandbox mode exists for either service — staging traffic is real traffic
+  on those accounts)
+- `OWNER_NOTIFICATION_EMAIL` set to an inbox you're fine getting staging
+  notifications at
+- `NEXT_PUBLIC_APP_URL=https://smiq-staging.<account>.workers.dev`
+- Cloudflare's published Turnstile test keys instead of the production
+  widget, so automated form submissions don't need a human to solve a
+  captcha: `NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA` /
+  `TURNSTILE_SECRET_KEY=1x0000000000000000000000000000AA`
+- A dedicated `API_AUTH_TOKEN` (don't reuse production's)
+
+```bash
+npm run secrets:staging   # push every key in .env.staging to the Worker as a secret
+npm run deploy:staging    # build (inlining .env.staging's NEXT_PUBLIC_* vars) + deploy
+```
+
+`deploy:staging` wraps the build in `dotenv-cli` so `.env.staging`'s values
+win over `.env.local` for that one build — otherwise Next.js would silently
+inline the production Turnstile site key instead. `secrets:staging` pushes
+every key in the file (including the `NEXT_PUBLIC_*` ones) as a Worker
+secret; those two specifically only matter at build time, not runtime, but
+pushing them is harmless.
+
+Branch and Worker provisioning: `npx neon branches create --name staging --parent production`
+creates the DB branch; the Worker is created automatically the first time
+`npm run secrets:staging` or `npm run deploy:staging` targets a Worker name
+that doesn't exist yet.
+
+---
+
 ## Routes
 
 | Route | Description |

@@ -51,8 +51,16 @@ the rewrite. Don't recreate it.
    different success copy.
 4. Tone is community-first. No sales language, no resource promises that
    won't be delivered.
-5. Design system: `#0e0c09` background, `#c8922a` gold, Playfair Display +
-   Crimson Pro, SVG grain overlay, gold radial glow.
+5. Design system: MALTAS institutional brand, sourced from the org's
+   `manual_marca_maltas.pdf` brand manual (not kept in the repo — ask the
+   owner if you need the source file again). White background, black
+   primary text. Blue `#213a8f` for structural/nav/
+   headings/links. Yellow `#fbba00` reserved exclusively for the primary CTA
+   button — never used elsewhere. Gray `#706f6f` for secondary text/borders.
+   Green `#18ab70` for success states, red `#e30613` for errors. Raleway
+   (display/headings) + Carlito as a Calibri substitute (body/UI, stack:
+   `Calibri, Carlito, system-ui, sans-serif`). Flat backgrounds — no grain
+   texture, no glow/gradient effects.
 
 ## Conventions
 

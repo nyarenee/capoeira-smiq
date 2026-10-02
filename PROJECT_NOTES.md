@@ -122,6 +122,50 @@
   table exists. Revisit and likely supersede this (not layer under it)
   once real multi-user dashboard auth is built.
 
+## Staging environment (decided 2026-10-02)
+
+- **Fulfills the staging item in `PRD.md`'s open questions** (previously
+  deferred — see memory `staging-environment-deferred`: testing happened
+  directly against prod, with manual cleanup of test rows twice during the
+  Kit/Turnstile work). Pulled forward as its own prerequisite once
+  integration/E2E test work needed a real deployed target to run against.
+- **Neon branch `staging`**, copy-on-write off `production` — isolates test
+  data from real response data. Created via the official `neon` CLI
+  (`npx neon branches create --name staging --parent production`), now a
+  devDependency; also installed the Neon MCP server and the `neon`/
+  `neon-postgres`/`neon-postgres-branches` agent skills at the user level
+  (not project-level, matching how every other MCP/skill in this environment
+  is already set up).
+- **Separate Cloudflare Worker `smiq-staging`** (`env.staging` in
+  `wrangler.jsonc`), same `main`/`assets`/`compatibility_date` as production
+  (inherited — not redeclared), reachable at
+  `https://smiq-staging.capoeirainternational.workers.dev`.
+- **Deploy stays manual**, matching how production already deploys (no CI
+  secrets exist in this repo) — `npm run secrets:staging` / `npm run
+  deploy:staging`. No GitHub Actions automation was added.
+- **Turnstile:** staging uses Cloudflare's published "always passes" test
+  keys instead of the production widget, so form submissions (manual or
+  automated) don't need a human to solve a captcha.
+- **Resend/Kit reused as-is** — neither has a sandbox mode, and this project
+  already accepted that tradeoff (manual cleanup) for the Kit/Turnstile work.
+  `OWNER_NOTIFICATION_EMAIL` for staging is the same address as production's
+  (this is already a single-developer inbox, not a separate owner alias), and
+  since Resend sends through the shared `onboarding@resend.dev` sender
+  (no verified custom domain), it can only deliver to that same address
+  anyway — a real containment mechanism, not just a convention.
+- **`.env.staging` build-time correctness:** `NEXT_PUBLIC_*` vars are inlined
+  by `next build`, and Next.js only lets already-set `process.env` values
+  win over `.env.local`/`.env.production` — it does not know about a custom
+  "staging" env file on its own. `deploy:staging` wraps the build with
+  `dotenv-cli` (`dotenv -e .env.staging -- opennextjs-cloudflare build
+  --env=staging`) to force staging's values into `process.env` before Next's
+  own env loader runs, otherwise the build would silently inline production's
+  Turnstile site key. Verified by inspecting the deployed JS bundle for the
+  test sitekey.
+- **Smoke test not yet added** — that's the next ticket (integration/E2E
+  tests), along with the full form-submission roundtrip and any CI/nightly
+  wiring.
+
 ## What to carry forward from v1
 
 The existing build is well-thought-through. v2 should preserve:
@@ -131,8 +175,10 @@ The existing build is well-thought-through. v2 should preserve:
 - **Teacher-only branching:** teaching situation (4 options) + graduation level
   (6 options including "ungraded")
 - **Lapsed segment treated as non-teacher** for routing
-- **Design system:** warm dark palette (`#0e0c09` bg, `#c8922a` gold),
-  Playfair Display + Crimson Pro typography, SVG grain overlay, gold radial glow
+- **Design system (v2):** rebranded to the MALTAS institutional palette
+  (blue/yellow/green/red/gray on white) and Raleway/Carlito typography —
+  see CLAUDE.md rule #5. The v1 dark/gold/Playfair system was replaced,
+  not carried forward.
 - **Tone:** community-first, no fake resource promises, no sales language
 - **Success screen:** "Axé, [name]!" with segment-specific copy (lapsed gets
   a different, more reflective message)
