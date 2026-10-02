@@ -24,6 +24,13 @@
     // `npm run deploy:staging`. See README.md "Staging" section.
     "staging": {
       "name": "smiq-staging",
+      // `routes` is inheritable — without this, env.staging would inherit
+      // the production www.capoeirainternational.com custom domain and
+      // REASSIGN it to smiq-staging on every staging deploy (confirmed via
+      // Wrangler's own warning: "Deploying this environment will reassign
+      // these custom domains away from the top-level Worker"). Staging
+      // only ever serves smiq-staging.workers.dev.
+      "routes": [],
     },
   },
 }
