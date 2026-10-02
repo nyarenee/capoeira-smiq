@@ -270,27 +270,31 @@
   judged as more infrastructure than this project needs right now) and
   production auto-deploy.
 
-## Custom domains + `proxy.ts` (decided 2026-10-02)
+## Custom domains (decided 2026-10-02)
 
-- **`www.capoeirainternational.com` and `intelligence.capoeirainternational.com`**
-  added as Workers Custom Domains on the production `smiq` Worker, alongside
-  (not replacing) the `*.workers.dev` URL. Required moving the domain's
-  nameservers from GoDaddy to Cloudflare — confirmed via Cloudflare's docs
-  that Custom Domains only work on Cloudflare-managed zones, no exception.
-  Declared in `wrangler.jsonc`'s top-level `routes` too (not just created
-  via dashboard), since a plain `wrangler deploy` with no `routes` declared
-  would otherwise silently drop dashboard-only custom domains on the next
+- **`www.capoeirainternational.com`** added as a Workers Custom Domain on
+  the production `smiq` Worker, alongside (not replacing) the
+  `*.workers.dev` URL. Required moving the domain's nameservers from
+  GoDaddy to Cloudflare — confirmed via Cloudflare's docs that Custom
+  Domains only work on Cloudflare-managed zones, no exception. Declared in
+  `wrangler.jsonc`'s top-level `routes` too (not just created via
+  dashboard), since a plain `wrangler deploy` with no `routes` declared
+  would otherwise silently drop a dashboard-only custom domain on the next
   deploy.
-- **Another real Next-16 breaking change caught via `AGENTS.md`'s warning,
-  not assumed from training data**: middleware is no longer `middleware.ts`
-  exporting `middleware()` — it's `proxy.ts` exporting `proxy()`. Confirmed
-  directly in `node_modules/next/dist/lib/constants.js`
+- **`/intelligence` is a path, not a subdomain** — a `intelligence.
+  capoeirainternational.com` Custom Domain was created and then deliberately
+  undone (dashboard + `wrangler.jsonc`) in favor of simpler: `/intelligence`
+  redirects to `/smiq` via `next.config.ts`'s `redirects()`, working on
+  `www.` and the `workers.dev` URL alike, no per-hostname logic needed.
+- **Real Next-16 breaking change caught via `AGENTS.md`'s warning, not
+  assumed from training data, while the subdomain approach was still in
+  play (now moot but worth keeping on record)**: middleware is no longer
+  `middleware.ts` exporting `middleware()` — it's `proxy.ts` exporting
+  `proxy()`. Confirmed directly in `node_modules/next/dist/lib/constants.js`
   (`PROXY_FILENAME = 'proxy'`, alongside a still-present but docs-abandoned
   `MIDDLEWARE_FILENAME`) and in this version's own fetched docs, which only
-  document `proxy.ts`. `proxy.ts` (repo root) redirects
-  `intelligence.capoeirainternational.com`'s root straight to `/smiq`;
-  `www.` and the `workers.dev` URL keep showing the normal landing page.
-  Verified locally by curling the dev server with a spoofed `Host` header.
+  document `proxy.ts`. If host-based routing is ever needed again, that's
+  the file/export name to use in this Next version.
 
 ## What to carry forward from v1
 

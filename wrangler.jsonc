@@ -8,15 +8,12 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
-  // Custom domains for the production Worker, created via the Cloudflare
+  // Custom domain for the production Worker, created via the Cloudflare
   // dashboard (Workers & Pages > smiq > Settings > Domains & Routes).
   // Declared here too so a plain `wrangler deploy` with no routes in config
-  // doesn't silently remove them (confirmed behavior, see PROJECT_NOTES.md
-  // "Custom domains + proxy.ts"). *.workers.dev keeps working unchanged.
-  "routes": [
-    { "pattern": "www.capoeirainternational.com", "custom_domain": true },
-    { "pattern": "intelligence.capoeirainternational.com", "custom_domain": true },
-  ],
+  // doesn't silently remove it (confirmed behavior, see PROJECT_NOTES.md
+  // "Custom domains"). *.workers.dev keeps working unchanged.
+  "routes": [{ "pattern": "www.capoeirainternational.com", "custom_domain": true }],
   "env": {
     // Staging: separate Worker + Neon branch, deployed on demand via
     // `npm run deploy:staging`. See README.md "Staging" section.
