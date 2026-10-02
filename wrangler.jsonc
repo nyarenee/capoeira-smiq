@@ -8,4 +8,11 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
+  "env": {
+    // Staging: separate Worker + Neon branch, deployed on demand via
+    // `npm run deploy:staging`. See README.md "Staging" section.
+    "staging": {
+      "name": "smiq-staging",
+    },
+  },
 }
