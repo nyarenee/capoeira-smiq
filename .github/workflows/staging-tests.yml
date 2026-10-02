@@ -1,0 +1,60 @@
+name: Staging Tests
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-tests
+  cancel-in-progress: false
+
+jobs:
+  staging-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # Mirrors the local .env.staging-test convention (see README.md
+      # "Staging") so test:integration/test:e2e behave identically here and
+      # on a developer's machine. STAGING_URL isn't secret (it's the public
+      # staging Worker), so it's hardcoded rather than a repo secret.
+      - name: Write .env.staging-test
+        env:
+          STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          STAGING_API_AUTH_TOKEN: ${{ secrets.STAGING_API_AUTH_TOKEN }}
+        run: |
+          cat <<EOF > .env.staging-test
+          STAGING_URL=https://smiq-staging.capoeirainternational.workers.dev
+          STAGING_DATABASE_URL=$STAGING_DATABASE_URL
+          STAGING_API_AUTH_TOKEN=$STAGING_API_AUTH_TOKEN
+          EOF
+
+      - name: Integration tests
+        run: npm run test:integration
+
+      - name: E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
