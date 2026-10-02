@@ -35,7 +35,7 @@ describe("GET /api/smiq/responses", () => {
   it("returns the auth helper's response unchanged and never queries the db when unauthorized", async () => {
     const unauthorizedResponse = Response.json(
       { ok: false, error: "Unauthorized" },
-      { status: 401 },
+      { status: 401 }
     );
     vi.mocked(requireApiAuth).mockResolvedValue(unauthorizedResponse);
 

@@ -21,9 +21,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: true, count: responses.length, responses });
   } catch (error) {
     console.error("[api/smiq/responses] failed to load responses", error);
-    return NextResponse.json(
-      { ok: false, error: "Something went wrong" },
-      { status: 500 },
-    );
+    return NextResponse.json({ ok: false, error: "Something went wrong" }, { status: 500 });
   }
 }
