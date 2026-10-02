@@ -33,7 +33,9 @@ the rewrite. Don't recreate it.
 - **M1** — Next.js scaffold, design tokens, Neon/Drizzle wired, landing page ✓
 - **M2** — SMIQ form, segment routing, confirm email, Turnstile, Kit, i18n ✓
 - **M3** — Dashboard (private, auth-gated), AI analysis server-side — **not
-  started**. No dashboard code exists in the repo yet.
+  started**. No dashboard code exists in the repo yet. Groundwork only:
+  `GET /api/smiq/responses` exists, gated by a shared-secret bearer token
+  (`lib/api-auth.ts`), not wired to any UI.
 
 ## Reference docs
 
