@@ -180,6 +180,21 @@
 
 ## Known issue — Resend likely rejects real users' confirmation emails (found 2026-10-02)
 
+- **In progress, blocked on DNS access (2026-10-02).** Plan: verify
+  `mail.capoeirainternational.com` as a dedicated sending subdomain (not the
+  root domain — the root will get real inbound email, e.g. Workspace, soon,
+  and a subdomain avoids an MX-record collision with that), then point
+  `RESEND_FROM_EMAIL` at `hello@mail.capoeirainternational.com`. Domain is
+  already created in Resend (id `b448b41b-875e-4017-baa5-f18c7f8d4102`,
+  status `not_started`). **Blocked:** `capoeirainternational.com`'s DNS
+  isn't on Cloudflare (so Resend's one-click "Sign in to Cloudflare" setup
+  doesn't apply) — the business partner who holds registrar access needs to
+  add 4 DNS records (1 TXT for DKIM, 1 MX + 1 TXT for SPF, 1 CNAME) directly
+  wherever DNS currently lives. Once added and Resend shows the domain
+  `verified`, resume: update `RESEND_FROM_EMAIL` in `.env.local`/
+  `.env.staging`, push both Worker secrets, verify via `npm run test:e2e`
+  (real synthetic-email sends should stop 403ing), then revert the E2E
+  sandbox-email workaround below (now unnecessary) and update this note.
 - **Not yet fixed. Found while building E2E tests for the submission flow,
   not something this ticket set out to fix.** `GET /domains` on the
   project's Resend account returns an empty list — **no custom domain is
