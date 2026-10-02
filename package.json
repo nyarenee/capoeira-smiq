@@ -22,6 +22,9 @@
     "secrets:staging": "wrangler secret bulk .env.staging --env staging",
     "deploy:staging": "dotenv -e .env.staging -- opennextjs-cloudflare build --env=staging && opennextjs-cloudflare deploy -- --env staging",
     "smoke:staging": "dotenv -e .env.staging -- tsx scripts/smoke-test.ts --url=https://smiq-staging.capoeirainternational.workers.dev",
+    "test:integration": "dotenv -e .env.staging-test -- vitest run --config vitest.integration.config.ts",
+    "test:e2e": "dotenv -e .env.staging-test -- playwright test",
+    "test:e2e:ui": "dotenv -e .env.staging-test -- playwright test --ui",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "prepare": "husky"
   },
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.20.2",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
