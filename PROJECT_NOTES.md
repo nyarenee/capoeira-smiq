@@ -178,52 +178,37 @@
   tests), along with the full form-submission roundtrip and any CI/nightly
   wiring.
 
-## Known issue — Resend likely rejects real users' confirmation emails (found 2026-10-02)
+## Fixed: Resend rejecting real users' confirmation emails (found + fixed 2026-10-02)
 
-- **In progress, blocked on DNS access (2026-10-02).** Plan: verify
-  `mail.capoeirainternational.com` as a dedicated sending subdomain (not the
-  root domain — the root will get real inbound email, e.g. Workspace, soon,
-  and a subdomain avoids an MX-record collision with that), then point
-  `RESEND_FROM_EMAIL` at `hello@mail.capoeirainternational.com`. Domain is
-  already created in Resend (id `b448b41b-875e-4017-baa5-f18c7f8d4102`,
-  status `not_started`). **Blocked:** `capoeirainternational.com`'s DNS
-  isn't on Cloudflare (so Resend's one-click "Sign in to Cloudflare" setup
-  doesn't apply) — the business partner who holds registrar access needs to
-  add 4 DNS records (1 TXT for DKIM, 1 MX + 1 TXT for SPF, 1 CNAME) directly
-  wherever DNS currently lives. Once added and Resend shows the domain
-  `verified`, resume: update `RESEND_FROM_EMAIL` in `.env.local`/
-  `.env.staging`, push both Worker secrets, verify via `npm run test:e2e`
-  (real synthetic-email sends should stop 403ing), then revert the E2E
-  sandbox-email workaround below (now unnecessary) and update this note.
-- **Not yet fixed. Found while building E2E tests for the submission flow,
-  not something this ticket set out to fix.** `GET /domains` on the
-  project's Resend account returns an empty list — **no custom domain is
-  verified**. Resend's `onboarding@resend.dev` sender only accepts sends
-  *to* the account's own verified owner address (confirmed via a live API
-  call: a send to `maltasgtd@gmail.com` succeeded; Resend's docs confirm
-  any other recipient gets a 403). Production uses this same sender
-  (`RESEND_FROM_EMAIL=onboarding@resend.dev` in `.env.local`), so **real
-  community members submitting the SMIQ form with their own email almost
-  certainly have their confirmation email rejected by Resend** —
-  `sendConfirmationEmail` throws on the 403, `submitResponse`'s catch block
-  turns that into a generic "Something went wrong" shown to the visitor, and
-  no `pending_smiq_submissions` row survives (the insert happens, then the
-  whole thing errors out before the user sees a success state — actually:
-  insert succeeds first, then the email send throws, so a pending row
-  *does* exist but the visitor sees an error and has no reason to check
-  their inbox for a confirm link that was never actually delivered).
-- Directly explains why `OWNER_NOTIFICATION_EMAIL`'s containment "feature"
-  (noted in the Staging environment section above) is really just this same
-  restriction viewed from the other side.
-- **Fix is infrastructure, not code:** verify a real sending domain in the
-  Resend dashboard and point `RESEND_FROM_EMAIL` at it. Out of scope for
-  the integration/E2E testing ticket; flagged here for prioritization.
-- The new E2E tests (`tests/e2e/`) work around this for the one spec that
-  drives a real submission through `submitResponse`: it types the account's
-  own verified email (`maltasgtd@gmail.com`) into the form instead of a
-  synthetic per-test address, since Resend would otherwise reject the send
-  and the test could never reach the pending/confirmed screen. Those tests
-  run serially (not parallel) to avoid racing on the one shared pending row.
+- **Root cause**: no verified Resend sending domain — `GET /domains`
+  returned empty. `onboarding@resend.dev` (what both prod and staging used)
+  only accepts sends *to* the account's own verified owner address; any
+  other recipient gets a 403. `sendConfirmationEmail` throws on that,
+  `submitResponse`'s catch turns it into a generic "Something went wrong,"
+  and the pending row silently survives with a confirm link that was never
+  delivered. Real community members submitting the form with their own
+  email had almost certainly been hitting this since launch.
+- **Fix**: verified `capoeira.international` (root domain, not a
+  subdomain — see "Custom domains" below for why a different domain than
+  `capoeirainternational.com`'s own subdomain was used) in Resend, then
+  pointed `RESEND_FROM_EMAIL` at `hello@capoeira.international` in both
+  `.env.local` and `.env.staging`, pushed to both Workers.
+- **Verified it actually works**: reverted the E2E tests' sandbox-email
+  workaround (shared real inbox, serial execution, marker-based row
+  isolation — all now unnecessary) back to unique synthetic emails per test
+  and full parallelism; all 9 E2E tests pass submitting through the real
+  form with synthetic `@e2e.capoeirainternational.test` addresses that
+  would have 403'd before the fix. Runtime dropped from ~27s (serial) to
+  ~12s (parallel) as a side benefit.
+- **Secret-drift bug caught in the process**: updating `.env.staging`
+  locally and running `secrets:staging` isn't enough on its own — the
+  `ENV_STAGING_FILE` GitHub secret (what CI's `deploy-staging` job writes
+  `.env.staging` from) is a separate copy. An unrelated CI deploy
+  (merging the staging-route-inheritance fix, see below) silently reverted
+  `RESEND_FROM_EMAIL` back to `onboarding@resend.dev` because that GitHub
+  secret was stale, which is exactly why the first E2E re-run after the fix
+  failed. **Going forward: `gh secret set ENV_STAGING_FILE < .env.staging`
+  every time `.env.staging` changes**, not just `npm run secrets:staging`.
 
 ## CI/CD (decided 2026-10-02)
 

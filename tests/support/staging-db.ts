@@ -25,53 +25,24 @@ export function testEmail(label: string): string {
   return `smiq-test+${safeLabel}-${unique}@${TEST_EMAIL_DOMAIN}`;
 }
 
-/**
- * A unique marker string to embed in a free-text field (the SMIQ answer)
- * when the email itself can't be unique per test — see
- * RESEND_SANDBOX_OWNER_EMAIL in staging-env.ts, required for any test that
- * submits through the real form (Resend's sandbox sender only accepts
- * sends to the account's own verified address). Lets a test find and clean
- * up only its own row, never another row that happens to share that email.
- */
-export function testMarker(label: string): string {
-  const safeLabel = label.replace(/[^a-z0-9-]/gi, "-");
-  return `[e2e:${safeLabel}-${Date.now()}-${crypto.randomUUID().slice(0, 8)}]`;
-}
-
-export async function findPendingSubmissionByEmail(
-  email: string,
-  opts?: { smiqAnswerContains?: string }
-) {
+export async function findPendingSubmissionByEmail(email: string) {
   const rows = await db()
     .select()
     .from(pendingSmiqSubmissions)
     .where(eq(pendingSmiqSubmissions.email, email));
-  if (opts?.smiqAnswerContains) {
-    return rows.find((row) => row.smiqAnswer.includes(opts.smiqAnswerContains!)) ?? null;
-  }
   return rows[0] ?? null;
 }
 
-export async function findSmiqResponseByEmail(
-  email: string,
-  opts?: { smiqAnswerContains?: string }
-) {
+export async function findSmiqResponseByEmail(email: string) {
   const rows = await db().select().from(smiqResponses).where(eq(smiqResponses.email, email));
-  if (opts?.smiqAnswerContains) {
-    return rows.find((row) => row.smiqAnswer?.includes(opts.smiqAnswerContains!)) ?? null;
-  }
   return rows[0] ?? null;
 }
 
 /** Polls for the row `submitResponse` writes asynchronously after a form submit. */
-export async function waitForPendingSubmission(
-  email: string,
-  opts?: { smiqAnswerContains?: string; timeoutMs?: number }
-) {
-  const timeoutMs = opts?.timeoutMs ?? 10000;
+export async function waitForPendingSubmission(email: string, timeoutMs = 10000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
-    const row = await findPendingSubmissionByEmail(email, opts);
+    const row = await findPendingSubmissionByEmail(email);
     if (row) return row;
     await new Promise((resolve) => setTimeout(resolve, 300));
   }
@@ -106,30 +77,10 @@ export async function seedExpiredPendingSubmission(overrides: { email: string; s
   return seedPendingSubmission({ ...overrides, expiresAt: new Date(Date.now() - 60 * 60 * 1000) });
 }
 
-/**
- * Deletes rows this test run created, by exact email. Safe when `email` is
- * a reserved synthetic test address (nothing else could share it). For a
- * shared real inbox (RESEND_SANDBOX_OWNER_EMAIL), use
- * deleteTestRowByMarker instead — this would delete unrelated rows too.
- */
+/** Deletes any rows this test run created, by exact email. Call in test teardown. */
 export async function deleteTestRowsByEmail(email: string) {
   await db().delete(pendingSmiqSubmissions).where(eq(pendingSmiqSubmissions.email, email));
   await db().delete(smiqResponses).where(eq(smiqResponses.email, email));
-}
-
-/**
- * Deletes only the one row matching both email and the test's unique
- * smiqAnswer marker (see testMarker) — safe to use against a shared real
- * inbox, since it can never match a different row that happens to share
- * that email.
- */
-export async function deleteTestRowByMarker(email: string, smiqAnswerContains: string) {
-  const pending = await findPendingSubmissionByEmail(email, { smiqAnswerContains });
-  if (pending)
-    await db().delete(pendingSmiqSubmissions).where(eq(pendingSmiqSubmissions.id, pending.id));
-
-  const response = await findSmiqResponseByEmail(email, { smiqAnswerContains });
-  if (response) await db().delete(smiqResponses).where(eq(smiqResponses.id, response.id));
 }
 
 /**
