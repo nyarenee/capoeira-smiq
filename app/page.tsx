@@ -158,4 +158,4 @@ export default async function Home() {
     </div>
   );
 }
-const x = 1;
+const x: string = 12345;
