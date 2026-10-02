@@ -94,7 +94,11 @@ Create `.env.staging` (gitignored, same shape as `.env.local`) with:
 - Cloudflare's published Turnstile test keys instead of the production
   widget, so automated form submissions don't need a human to solve a
   captcha: `NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA` /
-  `TURNSTILE_SECRET_KEY=1x0000000000000000000000000000AA`
+  `TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA` (verify
+  against https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+  if in doubt — the secret key has more zeros than the sitekey, easy to
+  miscount; `npx tsx -e` a quick siteverify call with the dummy token
+  `XXXX.DUMMY.TOKEN.XXXX` is the fastest way to confirm)
 - A dedicated `API_AUTH_TOKEN` (don't reuse production's)
 
 ```bash

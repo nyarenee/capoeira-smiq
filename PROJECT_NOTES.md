@@ -160,11 +160,55 @@
   `dotenv-cli` (`dotenv -e .env.staging -- opennextjs-cloudflare build
   --env=staging`) to force staging's values into `process.env` before Next's
   own env loader runs, otherwise the build would silently inline production's
-  Turnstile site key. Verified by inspecting the deployed JS bundle for the
-  test sitekey.
+  Turnstile site key. Verified at the time by inspecting the deployed JS
+  bundle for the test sitekey — **but that only checked the client-side
+  sitekey, never the server-side secret**. The `TURNSTILE_SECRET_KEY` value
+  written into `.env.staging` this same session was actually wrong (missing
+  3 zeros — `1x0000000000000000000000000000AA`, 32 chars, instead of the
+  correct `1x0000000000000000000000000000000AA`, 35 chars), so every
+  server-side `verifyTurnstileToken` call on staging failed from the moment
+  it was deployed. Found and fixed 2026-10-02 while building the E2E
+  submission tests (first thing that actually drove a real browser through
+  Turnstile end-to-end) — confirmed via a direct `siteverify` API call with
+  the dummy token `XXXX.DUMMY.TOKEN.XXXX`. Also wrong in `README.md` and
+  `.env.example` (now fixed there too) — if you ever see
+  `1x0000000000000000000000000000AA` (32 chars) anywhere, it's the bad
+  value, not a typo to "fix" back to.
 - **Smoke test not yet added** — that's the next ticket (integration/E2E
   tests), along with the full form-submission roundtrip and any CI/nightly
   wiring.
+
+## Known issue — Resend likely rejects real users' confirmation emails (found 2026-10-02)
+
+- **Not yet fixed. Found while building E2E tests for the submission flow,
+  not something this ticket set out to fix.** `GET /domains` on the
+  project's Resend account returns an empty list — **no custom domain is
+  verified**. Resend's `onboarding@resend.dev` sender only accepts sends
+  *to* the account's own verified owner address (confirmed via a live API
+  call: a send to `maltasgtd@gmail.com` succeeded; Resend's docs confirm
+  any other recipient gets a 403). Production uses this same sender
+  (`RESEND_FROM_EMAIL=onboarding@resend.dev` in `.env.local`), so **real
+  community members submitting the SMIQ form with their own email almost
+  certainly have their confirmation email rejected by Resend** —
+  `sendConfirmationEmail` throws on the 403, `submitResponse`'s catch block
+  turns that into a generic "Something went wrong" shown to the visitor, and
+  no `pending_smiq_submissions` row survives (the insert happens, then the
+  whole thing errors out before the user sees a success state — actually:
+  insert succeeds first, then the email send throws, so a pending row
+  *does* exist but the visitor sees an error and has no reason to check
+  their inbox for a confirm link that was never actually delivered).
+- Directly explains why `OWNER_NOTIFICATION_EMAIL`'s containment "feature"
+  (noted in the Staging environment section above) is really just this same
+  restriction viewed from the other side.
+- **Fix is infrastructure, not code:** verify a real sending domain in the
+  Resend dashboard and point `RESEND_FROM_EMAIL` at it. Out of scope for
+  the integration/E2E testing ticket; flagged here for prioritization.
+- The new E2E tests (`tests/e2e/`) work around this for the one spec that
+  drives a real submission through `submitResponse`: it types the account's
+  own verified email (`maltasgtd@gmail.com`) into the form instead of a
+  synthetic per-test address, since Resend would otherwise reject the send
+  and the test could never reach the pending/confirmed screen. Those tests
+  run serially (not parallel) to avoid racing on the one shared pending row.
 
 ## What to carry forward from v1
 
