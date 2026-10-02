@@ -12,15 +12,15 @@ export default function Icon() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#0e0c09",
+        background: "#213a8f",
       }}
     >
       <div
         style={{
-          width: 18,
-          height: 18,
-          borderRadius: "50%",
-          border: "3px solid #c8922a",
+          width: 16,
+          height: 16,
+          background: "#fbba00",
+          transform: "rotate(45deg)",
         }}
       />
     </div>,
