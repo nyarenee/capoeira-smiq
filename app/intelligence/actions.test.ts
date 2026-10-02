@@ -42,7 +42,7 @@ vi.mock("@/lib/email", () => ({
 }));
 vi.mock("@/lib/turnstile", () => ({ verifyTurnstileToken: vi.fn() }));
 
-import { submitResponse, confirmResponse } from "@/app/smiq/actions";
+import { submitResponse, confirmResponse } from "@/app/intelligence/actions";
 import { pendingSmiqSubmissions, smiqResponses } from "@/db/schema";
 import { subscribeToKit } from "@/lib/kit";
 import { sendConfirmationEmail, sendOwnerNotification } from "@/lib/email";

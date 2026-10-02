@@ -25,7 +25,7 @@ test.describe("full funnel submission (shared sandbox inbox, serial)", () => {
     label: string
   ) {
     const marker = testMarker(segment);
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await selectSegment(page, segment);
     await fillSmiqAnswer(page, `My single most important challenge. ${marker}`);
     await expect(page.locator("#step-2")).toHaveCount(0);
@@ -69,7 +69,7 @@ test.describe("full funnel submission (shared sandbox inbox, serial)", () => {
     page,
   }) => {
     const marker = testMarker("teacher");
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await selectSegment(page, "teacher");
     await fillSmiqAnswer(page, `My single most important challenge as a teacher. ${marker}`);
 
@@ -100,7 +100,7 @@ test.describe("funnel UI behavior (no real submission, parallel)", () => {
   test("submit is disabled until name, email, and a Turnstile token are all present", async ({
     page,
   }) => {
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await selectSegment(page, "curious");
     await fillSmiqAnswer(page, "Enough characters to enable the continue button for this check.");
 
@@ -115,7 +115,7 @@ test.describe("funnel UI behavior (no real submission, parallel)", () => {
   test("back/forward navigation: leaving the teacher step and switching segments re-skips it correctly", async ({
     page,
   }) => {
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await selectSegment(page, "teacher");
     await fillSmiqAnswer(
       page,
@@ -145,7 +145,7 @@ test.describe("funnel UI behavior (no real submission, parallel)", () => {
     baseURL,
   }) => {
     await context.addCookies([{ name: "capoeira-lang", value: "pt", url: baseURL }]);
-    await page.goto("/smiq");
+    await page.goto("/intelligence");
     await expect(page.locator('[data-segment="curious"] .seg-name')).toHaveText("O Curioso");
     await expect(page.locator('[data-segment="teacher"] .seg-name')).toHaveText("O Professor");
   });

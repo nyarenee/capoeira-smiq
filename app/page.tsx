@@ -13,7 +13,7 @@ export default async function Home() {
           {t("nav.logo")}
         </a>
         <div className="nav-end">
-          <a href="/smiq" className="nav-cta">
+          <a href="/intelligence" className="nav-cta">
             {t("nav.cta")}
           </a>
           <LangSwitcher />
@@ -33,7 +33,7 @@ export default async function Home() {
           </h1>
           <p className="hero-sub">{t("hero.body1")}</p>
           <p className="hero-sub">{t("hero.body2")}</p>
-          <a href="/smiq" className="hero-cta">
+          <a href="/intelligence" className="hero-cta">
             <span>{t("hero.cta")}</span>
             <span className="arrow">→</span>
           </a>
@@ -144,7 +144,7 @@ export default async function Home() {
           <em>{t("final_cta.h2_line2")}</em>
         </h2>
         <p>{t("final_cta.body")}</p>
-        <a href="/smiq" className="hero-cta">
+        <a href="/intelligence" className="hero-cta">
           <span>{t("final_cta.cta")}</span>
           <span className="arrow">→</span>
         </a>

@@ -78,14 +78,14 @@ describe("lib/email", () => {
       vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://smiq.example.com");
       await sendConfirmationEmail(baseArgs);
       const html = mockSend.mock.calls[0][0].html as string;
-      expect(html).toContain("https://smiq.example.com/smiq/confirm?token=tok-123");
+      expect(html).toContain("https://smiq.example.com/intelligence/confirm?token=tok-123");
     });
 
     it("falls back to localhost when NEXT_PUBLIC_APP_URL is unset", async () => {
       vi.stubEnv("NEXT_PUBLIC_APP_URL", undefined);
       await sendConfirmationEmail(baseArgs);
       const html = mockSend.mock.calls[0][0].html as string;
-      expect(html).toContain("http://localhost:3000/smiq/confirm?token=tok-123");
+      expect(html).toContain("http://localhost:3000/intelligence/confirm?token=tok-123");
     });
 
     it("uses RESEND_FROM_EMAIL as from when set", async () => {
