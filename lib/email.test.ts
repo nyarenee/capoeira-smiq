@@ -35,26 +35,43 @@ describe("lib/email", () => {
   });
 
   describe("sendConfirmationEmail", () => {
-    const baseArgs = { name: "Jane Doe", email: "jane@example.com", token: "tok-123", lang: "en" as string | null };
+    const baseArgs = {
+      name: "Jane Doe",
+      email: "jane@example.com",
+      token: "tok-123",
+      lang: "en" as string | null,
+    };
 
     it("calls getTranslations with the resolved locale and namespace", async () => {
       await sendConfirmationEmail(baseArgs);
-      expect(mockGetTranslations).toHaveBeenCalledWith({ locale: "en", namespace: "email.confirm" });
+      expect(mockGetTranslations).toHaveBeenCalledWith({
+        locale: "en",
+        namespace: "email.confirm",
+      });
     });
 
-    it("resolves locale to \"en\" for an unsupported lang", async () => {
+    it('resolves locale to "en" for an unsupported lang', async () => {
       await sendConfirmationEmail({ ...baseArgs, lang: "de" });
-      expect(mockGetTranslations).toHaveBeenCalledWith({ locale: "en", namespace: "email.confirm" });
+      expect(mockGetTranslations).toHaveBeenCalledWith({
+        locale: "en",
+        namespace: "email.confirm",
+      });
     });
 
-    it("resolves locale to \"en\" for a null lang", async () => {
+    it('resolves locale to "en" for a null lang', async () => {
       await sendConfirmationEmail({ ...baseArgs, lang: null });
-      expect(mockGetTranslations).toHaveBeenCalledWith({ locale: "en", namespace: "email.confirm" });
+      expect(mockGetTranslations).toHaveBeenCalledWith({
+        locale: "en",
+        namespace: "email.confirm",
+      });
     });
 
     it("preserves a supported lang", async () => {
       await sendConfirmationEmail({ ...baseArgs, lang: "pt" });
-      expect(mockGetTranslations).toHaveBeenCalledWith({ locale: "pt", namespace: "email.confirm" });
+      expect(mockGetTranslations).toHaveBeenCalledWith({
+        locale: "pt",
+        namespace: "email.confirm",
+      });
     });
 
     it("builds the confirm URL from NEXT_PUBLIC_APP_URL and the token", async () => {
@@ -95,15 +112,15 @@ describe("lib/email", () => {
       );
       await sendConfirmationEmail(baseArgs);
       const html = mockSend.mock.calls[0][0].html as string;
-      expect(html).toContain("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;quoted&#39;");
+      expect(html).toContain(
+        "&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;quoted&#39;"
+      );
       expect(html).not.toContain(`<script>alert("x")</script>`);
     });
 
     it("throws with the stringified error when emails.send returns an error", async () => {
       mockSend.mockResolvedValue({ data: null, error: { message: "bad request" } });
-      await expect(sendConfirmationEmail(baseArgs)).rejects.toThrow(
-        /Resend error:.*bad request/
-      );
+      await expect(sendConfirmationEmail(baseArgs)).rejects.toThrow(/Resend error:.*bad request/);
     });
   });
 

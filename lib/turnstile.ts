@@ -22,7 +22,11 @@ export async function verifyTurnstileToken(token: string, remoteip?: string): Pr
     return false;
   }
 
-  const data = (await res.json()) as { success: boolean; action?: string; "error-codes"?: string[] };
+  const data = (await res.json()) as {
+    success: boolean;
+    action?: string;
+    "error-codes"?: string[];
+  };
 
   if (!data.success) {
     console.warn("[turnstile] verification failed", data["error-codes"]);

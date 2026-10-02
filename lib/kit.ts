@@ -1,19 +1,19 @@
 const KIT_API = "https://api.kit.com/v4";
 
 const ROLE_TAG_ENV: Record<string, string> = {
-  classes:      "KIT_TAG_ID_ROLE_CLASSES",
+  classes: "KIT_TAG_ID_ROLE_CLASSES",
   "own-school": "KIT_TAG_ID_ROLE_OWN_SCHOOL",
-  admin:        "KIT_TAG_ID_ROLE_ADMIN",
-  online:       "KIT_TAG_ID_ROLE_ONLINE",
+  admin: "KIT_TAG_ID_ROLE_ADMIN",
+  online: "KIT_TAG_ID_ROLE_ONLINE",
 };
 
 const GRAD_TAG_ENV: Record<string, string> = {
-  monitor:         "KIT_TAG_ID_GRAD_MONITOR",
-  professor:       "KIT_TAG_ID_GRAD_PROFESSOR",
+  monitor: "KIT_TAG_ID_GRAD_MONITOR",
+  professor: "KIT_TAG_ID_GRAD_PROFESSOR",
   "contra-mestre": "KIT_TAG_ID_GRAD_CONTRA_MESTRE",
-  mestre:          "KIT_TAG_ID_GRAD_MESTRE",
-  "grao-mestre":   "KIT_TAG_ID_GRAD_GRAO_MESTRE",
-  ungraded:        "KIT_TAG_ID_GRAD_UNGRADED",
+  mestre: "KIT_TAG_ID_GRAD_MESTRE",
+  "grao-mestre": "KIT_TAG_ID_GRAD_GRAO_MESTRE",
+  ungraded: "KIT_TAG_ID_GRAD_UNGRADED",
 };
 
 const LANG_TAG_ENV: Record<string, string> = {

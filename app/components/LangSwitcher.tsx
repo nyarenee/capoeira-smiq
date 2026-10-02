@@ -40,7 +40,9 @@ export default function LangSwitcher() {
   useEffect(() => {
     if (!open) return;
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") { setOpen(false); }
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
@@ -59,7 +61,6 @@ export default function LangSwitcher() {
 
   return (
     <div className={`lang-switcher${open ? " lang-switcher--open" : ""}`} ref={wrapRef}>
-
       {/* ── Trigger ── */}
       <button
         type="button"
@@ -70,9 +71,13 @@ export default function LangSwitcher() {
         aria-label="Select language"
         disabled={isPending}
       >
-        <span className="lang-icon" aria-hidden="true">{FLAGS[active.code]}</span>
+        <span className="lang-icon" aria-hidden="true">
+          {FLAGS[active.code]}
+        </span>
         <span className="lang-label">{active.label}</span>
-        <span className="lang-chevron" aria-hidden="true">▾</span>
+        <span className="lang-chevron" aria-hidden="true">
+          ▾
+        </span>
       </button>
 
       {/* ── Dropdown (always rendered, shown via CSS transition) ── */}
@@ -93,7 +98,6 @@ export default function LangSwitcher() {
             </li>
           );
         })}
-
       </ul>
     </div>
   );

@@ -26,8 +26,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // locale-specific emails outside the request) takes precedence over
   // cookie/header detection.
   const requested = await requestLocale;
-  const locale =
-    requested && SUPPORTED_LOCALES.has(requested) ? requested : await resolveLocale();
+  const locale = requested && SUPPORTED_LOCALES.has(requested) ? requested : await resolveLocale();
 
   return {
     locale,

@@ -31,9 +31,7 @@ export const metadata: Metadata = {
     "A community research initiative gathering the single biggest challenges of capoeiristas worldwide. One question. Every voice counts.",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
   const dir = LANGUAGES.find((l) => l.code === locale)?.dir ?? "ltr";
 

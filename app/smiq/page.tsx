@@ -6,8 +6,7 @@ import LangSwitcher from "../components/LangSwitcher";
 
 export const metadata: Metadata = {
   title: "Share Your Voice — Capoeira International",
-  description:
-    "One question. Two minutes. Help shape the future of the global Capoeira community.",
+  description: "One question. Two minutes. Help shape the future of the global Capoeira community.",
 };
 
 export default async function SmiqPage() {

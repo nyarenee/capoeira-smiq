@@ -215,7 +215,9 @@ export default function SmiqForm() {
       {/* ── STEP 1 ── SMIQ open text ──────────────────────────────────────── */}
       {state.step === 1 && rawSegment && (
         <div key="step-1" className="step" id="step-1">
-          <span className="eyebrow" id="smiq-eyebrow">{t("form_step1.eyebrow")}</span>
+          <span className="eyebrow" id="smiq-eyebrow">
+            {t("form_step1.eyebrow")}
+          </span>
           <p className="smiq-label" id="smiq-question">
             {t(`form_segments.${rawSegment.key}_question`)}
           </p>
@@ -225,19 +227,12 @@ export default function SmiqForm() {
             minLength={10}
             placeholder={t(`form_segments.${rawSegment.key}_placeholder`)}
             value={state.smiqAnswer}
-            onChange={(e) =>
-              setState((prev) => ({ ...prev, smiqAnswer: e.target.value }))
-            }
+            onChange={(e) => setState((prev) => ({ ...prev, smiqAnswer: e.target.value }))}
             autoFocus
           />
           <p className="char-hint">{t("form_step1.hint")}</p>
           <div className="btn-row">
-            <button
-              className="btn btn-ghost"
-              id="back-from-smiq"
-              onClick={goBack}
-              type="button"
-            >
+            <button className="btn btn-ghost" id="back-from-smiq" onClick={goBack} type="button">
               {t("common.back")}
             </button>
             <button
@@ -269,9 +264,7 @@ export default function SmiqForm() {
                   className={`choice-card${state.teachingRole === opt.value ? " selected" : ""}`}
                   data-role={opt.value}
                   type="button"
-                  onClick={() =>
-                    setState((prev) => ({ ...prev, teachingRole: opt.value }))
-                  }
+                  onClick={() => setState((prev) => ({ ...prev, teachingRole: opt.value }))}
                 >
                   <span className="choice-name">{t(`form_step2.${opt.tkey}_label`)}</span>
                   <span className="choice-sub">{t(`form_step2.${opt.tkey}_sub`)}</span>
@@ -289,9 +282,7 @@ export default function SmiqForm() {
                   className={`choice-card${state.graduationLevel === opt.value ? " selected" : ""}`}
                   data-grad={opt.value}
                   type="button"
-                  onClick={() =>
-                    setState((prev) => ({ ...prev, graduationLevel: opt.value }))
-                  }
+                  onClick={() => setState((prev) => ({ ...prev, graduationLevel: opt.value }))}
                 >
                   <span className="choice-name">{t(`form_step2.${opt.tkey}_label`)}</span>
                   {opt.hasSub && (
@@ -303,12 +294,7 @@ export default function SmiqForm() {
           </div>
 
           <div className="btn-row">
-            <button
-              className="btn btn-ghost"
-              id="back-from-teacher"
-              onClick={goBack}
-              type="button"
-            >
+            <button className="btn btn-ghost" id="back-from-teacher" onClick={goBack} type="button">
               {t("common.back")}
             </button>
             <button
@@ -341,9 +327,7 @@ export default function SmiqForm() {
               id="name-input"
               placeholder={t("form_step3.name_placeholder")}
               value={state.name}
-              onChange={(e) =>
-                setState((prev) => ({ ...prev, name: e.target.value }))
-              }
+              onChange={(e) => setState((prev) => ({ ...prev, name: e.target.value }))}
               autoFocus
               autoComplete="given-name"
             />
@@ -358,9 +342,7 @@ export default function SmiqForm() {
               id="email-input"
               placeholder={t("form_step3.email_placeholder")}
               value={state.email}
-              onChange={(e) =>
-                setState((prev) => ({ ...prev, email: e.target.value }))
-              }
+              onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))}
               autoComplete="email"
             />
           </div>
@@ -368,19 +350,16 @@ export default function SmiqForm() {
           <TurnstileWidget ref={turnstileRef} onToken={handleTurnstileToken} />
 
           <div className="btn-row">
-            <button
-              className="btn btn-ghost"
-              id="back-from-email"
-              onClick={goBack}
-              type="button"
-            >
+            <button className="btn btn-ghost" id="back-from-email" onClick={goBack} type="button">
               {t("common.back")}
             </button>
             <button
               className={`btn btn-primary${submitting ? " loading" : ""}`}
               id="submit-btn"
               onClick={handleSubmit}
-              disabled={submitting || !state.name.trim() || !state.email.trim() || !state.turnstileToken}
+              disabled={
+                submitting || !state.name.trim() || !state.email.trim() || !state.turnstileToken
+              }
               type="button"
             >
               <span className="btn-text">{t("common.submit")}</span>

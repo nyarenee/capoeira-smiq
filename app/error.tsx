@@ -28,8 +28,8 @@ export default function Error({
               Something went wrong
             </div>
             <p className="success-msg" id="success-msg">
-              We hit an unexpected error on our end. Please try again — if it
-              keeps happening, come back in a little while.
+              We hit an unexpected error on our end. Please try again — if it keeps happening, come
+              back in a little while.
             </p>
             <div className="btn-row">
               <button type="button" className="btn btn-primary" onClick={() => reset()}>

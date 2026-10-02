@@ -7,14 +7,15 @@ export default async function Home() {
 
   return (
     <div className="page">
-
       {/* Nav */}
       <nav>
         <a href="#" className="nav-logo">
           {t("nav.logo")}
         </a>
         <div className="nav-end">
-          <a href="/smiq" className="nav-cta">{t("nav.cta")}</a>
+          <a href="/smiq" className="nav-cta">
+            {t("nav.cta")}
+          </a>
           <LangSwitcher />
         </div>
       </nav>
@@ -24,16 +25,14 @@ export default async function Home() {
         <div className="hero-center">
           <div className="hero-eyebrow">{t("hero.eyebrow")}</div>
           <h1>
-            <span>{t("hero.h1_line1")}</span><br />
-            <em>{t("hero.h1_line2")}</em><br />
+            <span>{t("hero.h1_line1")}</span>
+            <br />
+            <em>{t("hero.h1_line2")}</em>
+            <br />
             <span>{t("hero.h1_line3")}</span>
           </h1>
-          <p className="hero-sub">
-            {t("hero.body1")}
-          </p>
-          <p className="hero-sub">
-            {t("hero.body2")}
-          </p>
+          <p className="hero-sub">{t("hero.body1")}</p>
+          <p className="hero-sub">{t("hero.body2")}</p>
           <a href="/smiq" className="hero-cta">
             <span>{t("hero.cta")}</span>
             <span className="arrow">→</span>
@@ -48,19 +47,10 @@ export default async function Home() {
       {/* Who We Are */}
       <section className="section">
         <span className="section-eyebrow">{t("who_we_are.eyebrow")}</span>
-        <h2>
-          {t.rich("who_we_are.h2", { em })}
-        </h2>
+        <h2>{t.rich("who_we_are.h2", { em })}</h2>
+        <p>{t("who_we_are.body1")}</p>
         <p>
-          {t("who_we_are.body1")}
-        </p>
-        <p>
-          <span>
-            {t("who_we_are.body2_plain")}
-          </span>
-          {" "}
-          <strong>{t("who_we_are.body2_strong")}</strong>
-          {" "}
+          <span>{t("who_we_are.body2_plain")}</span> <strong>{t("who_we_are.body2_strong")}</strong>{" "}
           <span>{t("who_we_are.body2_tail")}</span>
         </p>
 
@@ -68,23 +58,17 @@ export default async function Home() {
           <div className="pillar">
             <span className="pillar-icon">🌍</span>
             <span className="pillar-title">{t("pillars.global_reach_title")}</span>
-            <p className="pillar-text">
-              {t("pillars.global_reach_text")}
-            </p>
+            <p className="pillar-text">{t("pillars.global_reach_text")}</p>
           </div>
           <div className="pillar">
             <span className="pillar-icon">🤝</span>
             <span className="pillar-title">{t("pillars.no_agenda_title")}</span>
-            <p className="pillar-text">
-              {t("pillars.no_agenda_text")}
-            </p>
+            <p className="pillar-text">{t("pillars.no_agenda_text")}</p>
           </div>
           <div className="pillar">
             <span className="pillar-icon">🥋</span>
             <span className="pillar-title">{t("pillars.all_levels_title")}</span>
-            <p className="pillar-text">
-              {t("pillars.all_levels_text")}
-            </p>
+            <p className="pillar-text">{t("pillars.all_levels_text")}</p>
           </div>
         </div>
       </section>
@@ -95,12 +79,8 @@ export default async function Home() {
       <section className="segments-section">
         <div className="segments-inner">
           <span className="section-eyebrow">{t("who_this_is_for.eyebrow")}</span>
-          <h2>
-            {t.rich("who_this_is_for.h2", { em })}
-          </h2>
-          <p className="lead">
-            {t("who_this_is_for.body1")}
-          </p>
+          <h2>{t.rich("who_this_is_for.h2", { em })}</h2>
+          <p className="lead">{t("who_this_is_for.body1")}</p>
           <p className="lead">{t("who_this_is_for.body2")}</p>
 
           <div className="seg-list">
@@ -141,16 +121,10 @@ export default async function Home() {
         >
           {t("why_asking.eyebrow")}
         </span>
-        <h2>
-          {t.rich("why_asking.h2", { em })}
-        </h2>
+        <h2>{t.rich("why_asking.h2", { em })}</h2>
+        <p>{t("why_asking.body1")}</p>
         <p>
-          {t("why_asking.body1")}
-        </p>
-        <p>
-          <strong>{t("why_asking.body2_strong")}</strong>
-          {" "}
-          <span>{t("why_asking.body2_rest")}</span>
+          <strong>{t("why_asking.body2_strong")}</strong> <span>{t("why_asking.body2_rest")}</span>
         </p>
 
         <ul className="promise-list">
@@ -165,7 +139,8 @@ export default async function Home() {
       {/* Final CTA */}
       <section className="final-cta">
         <h2>
-          <span>{t("final_cta.h2_line1")}</span><br />
+          <span>{t("final_cta.h2_line1")}</span>
+          <br />
           <em>{t("final_cta.h2_line2")}</em>
         </h2>
         <p>{t("final_cta.body")}</p>
@@ -178,11 +153,8 @@ export default async function Home() {
       {/* Footer */}
       <footer>
         <div className="footer-logo">{t("footer.logo")}</div>
-        <div className="footer-note">
-          {t("footer.tagline")}
-        </div>
+        <div className="footer-note">{t("footer.tagline")}</div>
       </footer>
-
     </div>
   );
 }

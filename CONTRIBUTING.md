@@ -20,6 +20,25 @@ at any time via `npm run deploy` (see `README.md`).
   days, then deleted. If a branch is still open after a couple of weeks,
   either land it or close it; don't let it drift from `main`.
 
+## Pre-commit hooks
+
+`npm install` wires up a Husky pre-commit hook (via the `prepare` script) that
+runs `lint-staged` on every commit:
+
+- `*.{js,jsx,ts,tsx}` → `eslint --fix`, then `prettier --write`
+- `*.{css,json,jsonc}` → `prettier --write`
+
+It only touches staged files, auto-fixes what it can, and re-stages the
+result — so most commits just pass silently. If `eslint --fix` can't resolve
+something (a real lint error, not just style), the commit is blocked until
+you fix it by hand. Markdown/docs are intentionally excluded (see
+`.prettierignore`) — Prettier formats code, not prose.
+
+The hook lives in `.husky/pre-commit`; the `lint-staged` config is in
+`package.json`. If you ever need to bypass it (rare — e.g. committing a
+work-in-progress snapshot on your own branch), `git commit --no-verify`, but
+don't make that a habit.
+
 ## Pull requests
 
 Every branch merges to `main` through a pull request — this is what makes
@@ -33,10 +52,14 @@ it was tested).
   If a second person (e.g. a business partner reviewing copy changes) is
   available and the change touches user-facing content, ask them to look
   before merging — but it's not a hard requirement to merge.
-- **Before opening a PR,** run the checks locally — there is no CI yet (see
-  Known gaps below):
+- **Before opening a PR,** run the checks locally too — CI runs them on the
+  PR (see `.github/workflows/ci.yml`), but it's not yet a required check
+  (see Known gaps below), so don't rely on it alone. The pre-commit hook
+  already covers lint/format on staged files as you go, but run the full
+  set before opening the PR:
   - `npx tsc --noEmit`
   - `npm run lint`
+  - `npm run format:check`
   - `npm test`
 - **PR description** should include a short summary of *why*, plus a test
   plan (what you ran, what you checked manually in a browser if it's a UI
@@ -57,7 +80,7 @@ git checkout -b feat/my-change
 
 # ... make changes, commit in small focused chunks ...
 
-npx tsc --noEmit && npm run lint && npm test
+npx tsc --noEmit && npm run lint && npm run format:check && npm test
 
 git push -u origin feat/my-change
 gh pr create   # fill in summary + test plan
@@ -82,11 +105,12 @@ enforces part of the policy above at the repo level, not just by agreement:
 
 ## Known gaps / follow-ups
 
-- **No CI workflow exists** (`.github/workflows/`) — the typecheck/lint/test
-  commands above are run locally, on the honor system. Adding a GitHub
-  Actions workflow that runs them on every PR, and adding "require status
-  checks to pass" to the ruleset above, would turn "merge conditions" from a
-  checklist into an actual gate.
+- **CI runs but isn't a required check yet** — `.github/workflows/ci.yml`
+  runs typecheck/lint/format-check/test on every PR and on push to `main`,
+  the same commands listed above. It's not wired into the "Protect main"
+  ruleset as a required status check yet, so it's currently informational
+  (red X is visible on the PR, but doesn't block merging). Adding "require
+  status checks to pass" to the ruleset would turn it into an actual gate.
 - **Staging environment** — not set up yet (see `PROJECT_NOTES.md`). Once it
   exists, this doc and the ruleset should be revisited (e.g. a required
   staging deploy/check before merging to `main`).
