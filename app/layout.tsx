@@ -1,28 +1,22 @@
 import type { Metadata } from "next";
-import { Spectral, EB_Garamond, JetBrains_Mono } from "next/font/google";
+import { Raleway, Carlito } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { LANGUAGES } from "@/lib/reference-data";
 import "./globals.css";
 
-const spectral = Spectral({
+const raleway = Raleway({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["600", "700", "800", "900"],
   style: ["normal", "italic"],
-  variable: "--font-playfair",
+  variable: "--font-display",
 });
 
-const ebGaramond = EB_Garamond({
+const carlito = Carlito({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
-  variable: "--font-crimson",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains",
+  variable: "--font-body-raw",
 });
 
 export const metadata: Metadata = {
@@ -36,17 +30,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const dir = LANGUAGES.find((l) => l.code === locale)?.dir ?? "ltr";
 
   return (
-    <html
-      lang={locale}
-      dir={dir}
-      className={`${spectral.variable} ${ebGaramond.variable} ${jetbrains.variable}`}
-    >
+    <html lang={locale} dir={dir} className={`${raleway.variable} ${carlito.variable}`}>
       <body>
-        <NextIntlClientProvider>
-          <div className="glow-top" />
-          <div className="glow-bottom" />
-          {children}
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
