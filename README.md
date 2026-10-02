@@ -41,6 +41,7 @@ KIT_API_KEY=...
 KIT_TAG_ID_ROLE_...             # Kit (ConvertKit) tag IDs — role, graduation, language
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=...  # Cloudflare Turnstile — same real widget for local dev and production
 TURNSTILE_SECRET_KEY=...            # (localhost/127.0.0.1 are allow-listed on the widget)
+API_AUTH_TOKEN=...                  # bearer token for the private /api/smiq/responses endpoint
 ```
 
 ```bash
@@ -81,6 +82,7 @@ Live at https://smiq.capoeirainternational.workers.dev.
 |---|---|
 | `/` | Landing page |
 | `/smiq` | SMIQ survey form |
+| `GET /api/smiq/responses` | Lists SMIQ responses. Requires `Authorization: Bearer <API_AUTH_TOKEN>`, 401s otherwise |
 
 ---
 

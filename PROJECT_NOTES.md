@@ -112,6 +112,16 @@
   later with `uselibpqcompat=true&sslmode=require` or explicit
   `sslmode=verify-full` in the Neon connection string.
 
+## API auth groundwork (decided 2026-10-01)
+
+- First protected API route added: `GET /api/smiq/responses`, gated by a
+  shared-secret bearer token (`API_AUTH_TOKEN`, checked in
+  `lib/api-auth.ts`). This is **not** the real user auth/magic-link login
+  the dashboard will eventually need — it's just enough to keep response
+  data private while M3 dashboard work gets started. No `users`/`sessions`
+  table exists. Revisit and likely supersede this (not layer under it)
+  once real multi-user dashboard auth is built.
+
 ## What to carry forward from v1
 
 The existing build is well-thought-through. v2 should preserve:
