@@ -92,7 +92,9 @@ describe("app/smiq/actions", () => {
     vi.mocked(subscribeToKit).mockReset().mockResolvedValue(undefined);
 
     vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.spyOn(crypto, "randomUUID").mockReturnValue("fixed-token" as ReturnType<typeof crypto.randomUUID>);
+    vi.spyOn(crypto, "randomUUID").mockReturnValue(
+      "fixed-token" as ReturnType<typeof crypto.randomUUID>
+    );
   });
 
   afterEach(() => {
@@ -283,7 +285,9 @@ describe("app/smiq/actions", () => {
 
     it("returns ok:false and logs the pending row when the smiqResponses insert fails", async () => {
       mockDb.delete.mockReturnValue(makeDeleteBuilder([pendingRow]));
-      mockDb.insert.mockReturnValue({ values: vi.fn().mockRejectedValue(new Error("insert failed")) });
+      mockDb.insert.mockReturnValue({
+        values: vi.fn().mockRejectedValue(new Error("insert failed")),
+      });
 
       const result = await confirmResponse("some-token");
 

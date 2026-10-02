@@ -10,13 +10,9 @@ import { sendConfirmationEmail, sendOwnerNotification } from "@/lib/email";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { validatePayload, type SubmitPayload } from "@/lib/validate-smiq-payload";
 
-export type SubmitResult =
-  | { ok: true; pendingEmail: string }
-  | { ok: false; error: string };
+export type SubmitResult = { ok: true; pendingEmail: string } | { ok: false; error: string };
 
-export async function submitResponse(
-  payload: SubmitPayload
-): Promise<SubmitResult> {
+export async function submitResponse(payload: SubmitPayload): Promise<SubmitResult> {
   const validated = validatePayload(payload);
   if (!validated.ok) {
     return validated;
@@ -41,9 +37,7 @@ export async function submitResponse(
   try {
     const db = getDb();
 
-    await db.delete(pendingSmiqSubmissions).where(
-      lt(pendingSmiqSubmissions.expiresAt, new Date())
-    );
+    await db.delete(pendingSmiqSubmissions).where(lt(pendingSmiqSubmissions.expiresAt, new Date()));
 
     await db.insert(pendingSmiqSubmissions).values({
       token,
@@ -74,10 +68,7 @@ export async function confirmResponse(token: string): Promise<{ ok: boolean }> {
   const [row] = await db
     .delete(pendingSmiqSubmissions)
     .where(
-      and(
-        eq(pendingSmiqSubmissions.token, token),
-        gt(pendingSmiqSubmissions.expiresAt, new Date())
-      )
+      and(eq(pendingSmiqSubmissions.token, token), gt(pendingSmiqSubmissions.expiresAt, new Date()))
     )
     .returning();
 

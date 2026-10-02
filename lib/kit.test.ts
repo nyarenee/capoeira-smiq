@@ -121,7 +121,11 @@ describe("subscribeToKit", () => {
     expect(fetchMock).toHaveBeenCalledTimes(3);
     const calledUrls = fetchMock.mock.calls.map((call) => call[0]).sort();
     expect(calledUrls).toEqual(
-      [`${KIT_API}/subscribers`, `${KIT_API}/tags/grad-1/subscribers`, `${KIT_API}/tags/lang-1/subscribers`].sort()
+      [
+        `${KIT_API}/subscribers`,
+        `${KIT_API}/tags/grad-1/subscribers`,
+        `${KIT_API}/tags/lang-1/subscribers`,
+      ].sort()
     );
   });
 

@@ -15,8 +15,8 @@ export default function NotFound() {
               Page not found
             </div>
             <p className="success-msg" id="success-msg">
-              This page doesn&apos;t exist, or the link may be broken. Let&apos;s get
-              you back on track.
+              This page doesn&apos;t exist, or the link may be broken. Let&apos;s get you back on
+              track.
             </p>
             <div className="btn-row">
               <Link href="/" className="btn btn-primary">

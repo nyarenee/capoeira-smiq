@@ -8,10 +8,22 @@ import { SEGMENTS, TEACHING_ROLES, GRADUATION_LEVELS, LANGUAGES } from "../lib/r
 async function main() {
   const db = getDb();
 
-  await db.insert(segments).values([...SEGMENTS]).onConflictDoNothing();
-  await db.insert(teachingRoles).values([...TEACHING_ROLES]).onConflictDoNothing();
-  await db.insert(graduationLevels).values([...GRADUATION_LEVELS]).onConflictDoNothing();
-  await db.insert(languages).values([...LANGUAGES]).onConflictDoNothing();
+  await db
+    .insert(segments)
+    .values([...SEGMENTS])
+    .onConflictDoNothing();
+  await db
+    .insert(teachingRoles)
+    .values([...TEACHING_ROLES])
+    .onConflictDoNothing();
+  await db
+    .insert(graduationLevels)
+    .values([...GRADUATION_LEVELS])
+    .onConflictDoNothing();
+  await db
+    .insert(languages)
+    .values([...LANGUAGES])
+    .onConflictDoNothing();
 
   console.log("Seeded reference data:", {
     segments: SEGMENTS.length,

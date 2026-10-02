@@ -145,7 +145,11 @@ describe("validatePayload", () => {
 
     it("rejects an invalid graduationLevel", () => {
       const result = validatePayload(
-        payload({ segment: "teacher", teachingRole: "classes", graduationLevel: "not-a-real-level" })
+        payload({
+          segment: "teacher",
+          teachingRole: "classes",
+          graduationLevel: "not-a-real-level",
+        })
       );
       expect(result).toEqual({ ok: false, error: "Please select a graduation level." });
     });
@@ -196,7 +200,7 @@ describe("validatePayload", () => {
   });
 
   describe("lang fallback", () => {
-    it("falls back to \"en\" for an unsupported lang", () => {
+    it('falls back to "en" for an unsupported lang', () => {
       const result = validatePayload(payload({ lang: "de" }));
       expect(result.ok).toBe(true);
       expect(result.ok && result.payload.lang).toBe("en");

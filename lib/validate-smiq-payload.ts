@@ -30,7 +30,9 @@ function normalizeText(value: string | null | undefined): string {
   return value?.trim() ?? "";
 }
 
-export function validatePayload(payload: SubmitPayload): { ok: true; payload: NormalizedSubmitPayload } | { ok: false; error: string } {
+export function validatePayload(
+  payload: SubmitPayload
+): { ok: true; payload: NormalizedSubmitPayload } | { ok: false; error: string } {
   const segment = normalizeText(payload.segment).toLowerCase();
   const smiqAnswer = normalizeText(payload.smiqAnswer);
   const teachingRole = normalizeText(payload.teachingRole);

@@ -1,0 +1,17 @@
+.next
+.open-next
+.wrangler
+.vercel
+out
+build
+coverage
+node_modules
+drizzle
+package-lock.json
+next-env.d.ts
+cloudflare-env.d.ts
+*.tsbuildinfo
+
+# Prose/content, not code — not Prettier's job.
+*.md
+.claude/**
