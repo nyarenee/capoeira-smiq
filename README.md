@@ -4,6 +4,9 @@ A community research tool for the global Capoeira community. Segments visitors b
 
 Branded as **Capoeira International**, run by **Malta Capoeira**.
 
+[![CI](https://github.com/nyarenee/capoeira-smiq/actions/workflows/ci.yml/badge.svg)](https://github.com/nyarenee/capoeira-smiq/actions/workflows/ci.yml)
+[![Staging Tests](https://github.com/nyarenee/capoeira-smiq/actions/workflows/staging-tests.yml/badge.svg)](https://github.com/nyarenee/capoeira-smiq/actions/workflows/staging-tests.yml)
+
 - **v1 (live):** https://maltascapoeira.github.io/smiq/
 - **v2 (this repo):** https://smiq.capoeirainternational.workers.dev
 
@@ -79,8 +82,13 @@ Live at https://smiq.capoeirainternational.workers.dev.
 ## Staging
 
 A separate Worker (`smiq-staging`) backed by a Neon branch (`staging`,
-branched off `production`) for verifying changes against a real deployed
-target before merging to `main`. See `CONTRIBUTING.md` for when to use it.
+branched off `production`).
+
+**Merging to `main` automatically deploys staging** (`.github/workflows/ci.yml`'s
+`deploy-staging` job, which also triggers `staging-tests.yml` to verify the
+fresh deploy). The manual commands below still exist for verifying a branch
+*before* merging — the two don't conflict, one's pre-merge, one's post-merge.
+See `CONTRIBUTING.md` for when to use the manual path.
 
 Create `.env.staging` (gitignored, same shape as `.env.local`) with:
 

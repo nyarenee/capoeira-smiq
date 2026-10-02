@@ -53,8 +53,9 @@ it was tested).
   available and the change touches user-facing content, ask them to look
   before merging — but it's not a hard requirement to merge.
 - **Before opening a PR,** run the checks locally too — CI runs them on the
-  PR (see `.github/workflows/ci.yml`), but it's not yet a required check
-  (see Known gaps below), so don't rely on it alone. The pre-commit hook
+  PR (see `.github/workflows/ci.yml`) and **is a required status check**
+  (the PR can't merge until it passes), but running locally first means you
+  find out in seconds instead of waiting on a CI run. The pre-commit hook
   already covers lint/format on staged files as you go, but run the full
   set before opening the PR:
   - `npx tsc --noEmit`
@@ -106,16 +107,16 @@ enforces part of the policy above at the repo level, not just by agreement:
   one-line fixes. There is no bypass, including for the repo owner.
 - 0 required approvals, so a solo developer can still merge their own PRs.
 - No force pushes (`non_fast_forward`) and no branch deletion.
+- **The `checks` job in `.github/workflows/ci.yml` must pass** — typecheck,
+  lint, format-check, build, and unit tests. A PR can't merge while it's
+  red. Deliberately *not* wired in: `staging-tests.yml`'s integration/E2E
+  suite — those run after a merge auto-deploys staging, not before
+  (see `README.md` "Staging" and `PROJECT_NOTES.md` for why).
 
 ## Known gaps / follow-ups
 
-- **CI runs but isn't a required check yet** — `.github/workflows/ci.yml`
-  runs typecheck/lint/format-check/test on every PR and on push to `main`,
-  the same commands listed above. It's not wired into the "Protect main"
-  ruleset as a required status check yet, so it's currently informational
-  (red X is visible on the PR, but doesn't block merging). Adding "require
-  status checks to pass" to the ruleset would turn it into an actual gate.
-- **Staging deploy isn't a required gate** — `npm run deploy:staging` exists
-  (see `README.md` "Staging" and `PROJECT_NOTES.md`), but using it before
-  merging is a judgment call, not enforced by the "Protect main" ruleset or
-  CI. Revisit this if that turns out to matter in practice.
+- **Staging deploy is automatic now, production isn't** — merging to
+  `main` auto-deploys staging (`deploy-staging` job in `ci.yml`), but
+  production still ships via `npm run deploy`, run manually. That's by
+  design for now, not an oversight — revisit if/when it's worth automating
+  too.

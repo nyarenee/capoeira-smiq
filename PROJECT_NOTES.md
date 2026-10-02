@@ -225,6 +225,51 @@
   and the test could never reach the pending/confirmed screen. Those tests
   run serially (not parallel) to avoid racing on the one shared pending row.
 
+## CI/CD (decided 2026-10-02)
+
+- **Per-PR/push stays fast and side-effect-free**: `ci.yml`'s `checks` job
+  now also runs a plain `npm run build` (previously only typecheck/lint/
+  format/unit tests) and **is wired into the "Protect main" ruleset as a
+  required status check** — a red build/lint/test blocks merging, reversing
+  the earlier deliberate "informational only" choice. Integration/E2E
+  deliberately stay off the per-PR path — there's nothing deployed yet to
+  meaningfully test pre-merge, and it would put real Resend/Kit sends and
+  Playwright browser installs on every push.
+- **Merging to main auto-deploys staging** — new `deploy-staging` job in
+  `ci.yml` (`needs: checks`, only on `push` to `main`, never for PRs): writes
+  `.env.staging` from a new whole-file secret `ENV_STAGING_FILE`, runs
+  `secrets:staging` + `deploy:staging`, then dispatches `staging-tests.yml`
+  directly (`gh workflow run`, not an indirect `workflow_run` trigger — that
+  event's branch filtering doesn't cleanly distinguish a PR-triggered parent
+  run from a push-triggered one). Reverses the earlier staging-ticket's
+  "manual deploy only" decision, deliberately, per this ticket's own
+  criteria. **Production stays manual** (`npm run deploy`) — this ticket
+  only asked for staging, and "continuous deploy to staging, gated promote
+  to prod" is itself the standard pattern, not a gap to close later.
+- **Why integration/E2E run post-deploy instead of nightly-only or
+  per-PR**: testing the actual thing that just went live catches a bad
+  deploy within minutes instead of up to 24h later — exactly the class of
+  bug the Turnstile-secret mistake was. The nightly cron in
+  `staging-tests.yml` is unchanged, kept as a steady background safety net
+  independent of deploy activity.
+- **New secrets**: `CLOUDFLARE_API_TOKEN` (user-created via Cloudflare's
+  "Edit Cloudflare Workers" token template — least-privilege, confirmed
+  against Cloudflare's own CI/CD docs), `CLOUDFLARE_ACCOUNT_ID` (not
+  sensitive), `ENV_STAGING_FILE` (whole contents of `.env.staging`, same
+  pattern as `.env.staging-test` in the existing nightly workflow).
+- **Not using `cloudflare/wrangler-action`**: it wraps a single `wrangler`
+  subcommand; this project's deploy is a two-step `opennextjs-cloudflare
+  build && deploy` pipeline that doesn't fit that shape. A plain `run:`
+  step calling the existing `deploy:staging` npm script with
+  `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID` as env vars (which wrangler
+  reads natively) is the correct fit, not a deviation from best practice.
+- **Notifications**: GitHub's built-in PR/Actions notifications (failed
+  check = red X + email to the author) — no Slack/Discord webhook added.
+- **Deliberately deferred**: per-branch preview environments (the "more
+  correct" way to verify before touching shared staging at all — discussed,
+  judged as more infrastructure than this project needs right now) and
+  production auto-deploy.
+
 ## What to carry forward from v1
 
 The existing build is well-thought-through. v2 should preserve:
