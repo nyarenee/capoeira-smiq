@@ -12,8 +12,13 @@
   // dashboard (Workers & Pages > smiq > Settings > Domains & Routes).
   // Declared here too so a plain `wrangler deploy` with no routes in config
   // doesn't silently remove it (confirmed behavior, see PROJECT_NOTES.md
-  // "Custom domains"). *.workers.dev keeps working unchanged.
+  // "Custom domains").
   "routes": [{ "pattern": "www.capoeirainternational.com", "custom_domain": true }],
+  // Wrangler defaults workers_dev to false once routes/custom_domain are
+  // declared (confirmed the hard way — this broke the live workers.dev URL
+  // on the first deploy after adding routes above). Keep it on explicitly:
+  // smiq.capoeirainternational.workers.dev must keep working unchanged.
+  "workers_dev": true,
   "env": {
     // Staging: separate Worker + Neon branch, deployed on demand via
     // `npm run deploy:staging`. See README.md "Staging" section.
