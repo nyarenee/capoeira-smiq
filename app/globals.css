@@ -1403,6 +1403,9 @@ hr.rule {
   font-style: italic;
   color: var(--accent);
 }
+.axe-heading--error {
+  color: var(--error);
+}
 .success-msg {
   font-size: clamp(1rem, 2vw, 1.15rem);
   color: var(--text-muted);

@@ -24,7 +24,7 @@ export default function Error({
       <main className="smiq-page">
         <div className="card" id="main-card">
           <div id="success-screen">
-            <div className="axe-heading" id="success-heading">
+            <div className="axe-heading axe-heading--error" id="success-heading">
               Something went wrong
             </div>
             <p className="success-msg" id="success-msg">

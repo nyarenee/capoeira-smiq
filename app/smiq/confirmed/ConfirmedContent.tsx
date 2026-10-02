@@ -17,7 +17,7 @@ export default function ConfirmedContent() {
           </div>
           <p className="success-msg" id="success-msg">
             {t("confirmed.expired_before")}
-            <a href="/smiq" style={{ color: "var(--gold)" }}>
+            <a href="/smiq" style={{ color: "var(--accent)" }}>
               {t("confirmed.expired_link")}
             </a>
             {t("confirmed.expired_after")}
