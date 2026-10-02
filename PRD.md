@@ -57,7 +57,7 @@ Five visitor-facing personas, defined by the segment picker, plus one internal p
 ### Should-Have
 
 - Lapsed segment included in dashboard filters and stats (v1 explicitly missed this — don't repeat it)
-- Staging environment — separate Neon branch + preview deploy, so testing stops happening in prod (currently deferred; add once real user volume starts)
+- ~~Staging environment — separate Neon branch + preview deploy, so testing stops happening in prod~~ — done 2026-10-02, see `PROJECT_NOTES.md` "Staging environment"
 - Structured logging / basic error visibility around the confirm → Kit → owner-notification chain, beyond `console.error`
 - Deploy/prod-parity check as part of the release habit — `main` has drifted ahead of the live Worker before; a lightweight way to see that at a glance would prevent shipping surprises
 - Custom domain (currently `*.workers.dev`)

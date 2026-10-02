@@ -61,6 +61,10 @@ it was tested).
   - `npm run lint`
   - `npm run format:check`
   - `npm test`
+- **If the change is risky** (touches the SMIQ submission flow, email/Kit
+  integration, or the DB schema) or you just want to see it live before
+  committing to it, deploy to staging first: `npm run deploy:staging` (see
+  `README.md` "Staging"). This is a judgment call, not a required gate.
 - **PR description** should include a short summary of *why*, plus a test
   plan (what you ran, what you checked manually in a browser if it's a UI
   change).
@@ -111,6 +115,7 @@ enforces part of the policy above at the repo level, not just by agreement:
   ruleset as a required status check yet, so it's currently informational
   (red X is visible on the PR, but doesn't block merging). Adding "require
   status checks to pass" to the ruleset would turn it into an actual gate.
-- **Staging environment** — not set up yet (see `PROJECT_NOTES.md`). Once it
-  exists, this doc and the ruleset should be revisited (e.g. a required
-  staging deploy/check before merging to `main`).
+- **Staging deploy isn't a required gate** — `npm run deploy:staging` exists
+  (see `README.md` "Staging" and `PROJECT_NOTES.md`), but using it before
+  merging is a judgment call, not enforced by the "Protect main" ruleset or
+  CI. Revisit this if that turns out to matter in practice.
