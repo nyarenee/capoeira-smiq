@@ -52,9 +52,11 @@ it was tested).
   If a second person (e.g. a business partner reviewing copy changes) is
   available and the change touches user-facing content, ask them to look
   before merging — but it's not a hard requirement to merge.
-- **Before opening a PR,** run the checks locally — there is no CI yet (see
-  Known gaps below). The pre-commit hook already covers lint/format on
-  staged files as you go, but run the full set before opening the PR:
+- **Before opening a PR,** run the checks locally too — CI runs them on the
+  PR (see `.github/workflows/ci.yml`), but it's not yet a required check
+  (see Known gaps below), so don't rely on it alone. The pre-commit hook
+  already covers lint/format on staged files as you go, but run the full
+  set before opening the PR:
   - `npx tsc --noEmit`
   - `npm run lint`
   - `npm run format:check`
@@ -103,11 +105,12 @@ enforces part of the policy above at the repo level, not just by agreement:
 
 ## Known gaps / follow-ups
 
-- **No CI workflow exists** (`.github/workflows/`) — the typecheck/lint/test
-  commands above are run locally, on the honor system. Adding a GitHub
-  Actions workflow that runs them on every PR, and adding "require status
-  checks to pass" to the ruleset above, would turn "merge conditions" from a
-  checklist into an actual gate.
+- **CI runs but isn't a required check yet** — `.github/workflows/ci.yml`
+  runs typecheck/lint/format-check/test on every PR and on push to `main`,
+  the same commands listed above. It's not wired into the "Protect main"
+  ruleset as a required status check yet, so it's currently informational
+  (red X is visible on the PR, but doesn't block merging). Adding "require
+  status checks to pass" to the ruleset would turn it into an actual gate.
 - **Staging environment** — not set up yet (see `PROJECT_NOTES.md`). Once it
   exists, this doc and the ruleset should be revisited (e.g. a required
   staging deploy/check before merging to `main`).
